@@ -2,6 +2,8 @@ package agh.cs.oop1;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.ExecutionException;
+
 public class Vector2d{
     public final int x;
     public final int y;
@@ -53,6 +55,8 @@ public class Vector2d{
     }
 
     public Vector2d mod(Vector2d other){
+        if(other.x == 0 || other.y == 0)
+            throw new ArithmeticException("You can not use modulo, when right side is zero!");
         return new Vector2d(this.x % other.x, this.y % other.y);
     }
 
