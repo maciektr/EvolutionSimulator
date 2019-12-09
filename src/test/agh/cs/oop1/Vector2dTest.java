@@ -72,5 +72,12 @@ public class Vector2dTest {
         Assert.assertNotEquals(vector_1_1, vector_1_1.opposite());
     }
 
+    @Test
+    public void mod(){
+        Assert.assertEquals(vector_1_0,vector_1_2.mod(vector_2_2));
+        Assert.assertEquals(vector_1_1,vector_1_1.mod(vector_2_2));
+        Assert.assertNotEquals(vector_2_2, vector_2_2.mod(vector_1_1));
+    }
+
 }
 
