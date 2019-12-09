@@ -54,11 +54,11 @@ public class Vector2d{
         return new Vector2d(-this.x, -this.y);
     }
 
-    public Vector2d mod(Vector2d other){
-        if(other.x == 0 || other.y == 0)
-            throw new ArithmeticException("You can not use modulo, when right side is zero!");
-        return new Vector2d(this.x % other.x, this.y % other.y);
-    }
+//    public Vector2d mod(Vector2d other){
+//        if(other.x == 0 || other.y == 0)
+//            throw new ArithmeticException("You can not use modulo, when right side is zero!");
+//        return new Vector2d(this.x % other.x, this.y % other.y);
+//    }
 
     @Override
     public int hashCode(){
