@@ -13,10 +13,11 @@ public class World {
         Gson gson = new Gson();
         try {
             final Configuration config = gson.fromJson(new FileReader(System.getProperty("user.dir") + "/" + World.parametersPath), Configuration.class);
-//            System.out.println(config.toString());
+            System.out.println(config.toString());
 
             LoopedMap map = new LoopedMap(config.width, config.height, config.jungleWidth(), config.jungleHeight());
-
+            System.out.println(map.mapLowerLeft + " | "+ map.mapUpperRight);
+            System.out.println(map.jungleLowerLeft+" | "+map.jungleUpperRight);
 
         }catch (FileNotFoundException ex){
             System.out.println("Configuration file parameters.json not found!\n Application cannot be launched.\n"+ex.toString());

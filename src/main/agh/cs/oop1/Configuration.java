@@ -5,10 +5,12 @@ public class Configuration {
     public final int height;
     public final int startEnergy;
     public final  int moveEnergy;
+    public final int startAnimals;
     public final double jungleRatio;
 
+
     Configuration(){
-        this.width = this.height = this.startEnergy = this.moveEnergy =0;
+        this.width = this.height = this.startEnergy = this.moveEnergy = this.startAnimals = 0;
         this.jungleRatio = 0;
     }
 
@@ -20,6 +22,7 @@ public class Configuration {
                 ", startEnergy=" + startEnergy +
                 ", moveEnergy=" + moveEnergy +
                 ", jungleRatio=" + jungleRatio +
+                ", startAnimals="+ startAnimals +
                 '}';
     }
 
