@@ -9,18 +9,16 @@ import java.io.FileReader;
 
 public class World {
     private static final String parametersPath = "parameters.json";
+
     public static void main(String []args) throws FileNotFoundException {
-        Gson gson = new Gson();
+
         try {
-            final Configuration config = gson.fromJson(new FileReader(System.getProperty("user.dir") + "/" + World.parametersPath), Configuration.class);
+            final Configuration config = Configuration.fromJson(World.parametersPath);
             System.out.println(config.toString());
-
             LoopedMap map = new LoopedMap(config.width, config.height, config.jungleWidth(), config.jungleHeight());
-            System.out.println(map.mapLowerLeft + " | "+ map.mapUpperRight);
-            System.out.println(map.jungleLowerLeft+" | "+map.jungleUpperRight);
 
-        }catch (FileNotFoundException ex){
-            System.out.println("Configuration file parameters.json not found!\n Application cannot be launched.\n"+ex.toString());
+        }catch(FileNotFoundException ex){
+            System.out.println("Application cannot be launched!");
         }catch (IllegalArgumentException ex){
             System.out.println("Illegal configuration! Check parameters.json file.\n"+ex.toString());
         }

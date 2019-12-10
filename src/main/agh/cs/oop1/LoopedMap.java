@@ -117,63 +117,67 @@ public class LoopedMap implements IWorldMap, IPositionChangeObserver {
         return this.mapLowerLeft.add(new Vector2d(randW, randH));
     }
 
-    private void takeOutToMove(Object a,Vector2d oldPosition, IMapElement element){
-        if(a instanceof Unit){
-            objects.remove(oldPosition);
+//    private void takeOutToMove(Object a,Vector2d oldPosition, IMapElement element){
+//        if(a instanceof Unit){
+//            objects.remove(oldPosition);
+//
+//        }else if(a instanceof Pair){
+//            if(((Pair) a).getValue0()!= element && ((Pair) a).getValue1() != element)
+//                throw new IllegalArgumentException("Cannot move map element!\n No such element at given position!");
+//
+//            IMapElement untouched = (IMapElement) ((Pair) a).getValue0();
+//            if(((Pair) a).getValue0() == element)
+//                untouched = (IMapElement) ((Pair) a).getValue1();
+//
+//            objects.remove(oldPosition);
+//            objects.put(oldPosition, new Unit<IMapElement>(untouched));
+//
+//        }else if(a instanceof Triplet) {
+//            if(((Triplet) a).getValue0()!= element && ((Triplet) a).getValue1() != element && ((Triplet) a).getValue2() != element)
+//                throw new IllegalArgumentException("Cannot move map element!\n No such element at given position!");
+//
+//            IMapElement untouched1 = (IMapElement)((Triplet) a).getValue0();
+//            IMapElement untouched2 = (IMapElement)((Triplet) a).getValue1();
+//            if(untouched1 == element)
+//                    untouched1 = (IMapElement)((Triplet) a).getValue2();
+//            if(untouched2 == element)
+//                    untouched2 = (IMapElement)((Triplet) a).getValue2();
+//
+//
+//            objects.remove(oldPosition);
+//            objects.put(oldPosition, new Pair<IMapElement, IMapElement>(untouched1, untouched2));
+//
+//        }else
+//            throw new IllegalArgumentException("Cannot move map element!\n Given position corrupted!");
+//    }
+//
+//    void putOnPos(Object b, Vector2d newPosition, IMapElement element){
+//        if(b == null){
+//            objects.put(newPosition, new Unit<IMapElement>(element));
+//        }else if (b instanceof Unit){
+//            objects.remove(newPosition);
+//            objects.put(newPosition, new Pair<IMapElement,IMapElement>((IMapElement) ((Unit) b).getValue0(), element));
+//        }else if(b instanceof Pair){
+//            objects.remove(newPosition);
+//            objects.put(newPosition, new Triplet<IMapElement,IMapElement,IMapElement>((IMapElement)((Pair) b).getValue0(), (IMapElement)((Pair) b).getValue1(), element));
+//        }
+//    }
 
-        }else if(a instanceof Pair){
-            if(((Pair) a).getValue0()!= element && ((Pair) a).getValue1() != element)
-                throw new IllegalArgumentException("Cannot move map element!\n No such element at given position!");
+//    public void positionChanged(Vector2d oldPosition, Vector2d newPosition, IMapElement element) {
+//        Object a = this.objectAt(oldPosition);
+//        if(a==null)
+//            throw new IllegalArgumentException("Cannot move map element!\n Given position empty!");
+//
+//        Object b = this.objectAt(newPosition);
+//        if (b instanceof Triplet)
+//            throw new IllegalArgumentException("Cannot move map element!\n Destination is full!");
+//
+//        this.takeOutToMove(a,oldPosition,element);
+//        this.putOnPos(b,newPosition,element);
+//    }
 
-            IMapElement untouched = (IMapElement) ((Pair) a).getValue0();
-            if(((Pair) a).getValue0() == element)
-                untouched = (IMapElement) ((Pair) a).getValue1();
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition, IMapElement element){
 
-            objects.remove(oldPosition);
-            objects.put(oldPosition, new Unit<IMapElement>(untouched));
-
-        }else if(a instanceof Triplet) {
-            if(((Triplet) a).getValue0()!= element && ((Triplet) a).getValue1() != element && ((Triplet) a).getValue2() != element)
-                throw new IllegalArgumentException("Cannot move map element!\n No such element at given position!");
-
-            IMapElement untouched1 = (IMapElement)((Triplet) a).getValue0();
-            IMapElement untouched2 = (IMapElement)((Triplet) a).getValue1();
-            if(untouched1 == element)
-                    untouched1 = (IMapElement)((Triplet) a).getValue2();
-            if(untouched2 == element)
-                    untouched2 = (IMapElement)((Triplet) a).getValue2();
-
-
-            objects.remove(oldPosition);
-            objects.put(oldPosition, new Pair<IMapElement, IMapElement>(untouched1, untouched2));
-
-        }else
-            throw new IllegalArgumentException("Cannot move map element!\n Given position corrupted!");
-    }
-
-    void putOnPos(Object b, Vector2d newPosition, IMapElement element){
-        if(b == null){
-            objects.put(newPosition, new Unit<IMapElement>(element));
-        }else if (b instanceof Unit){
-            objects.remove(newPosition);
-            objects.put(newPosition, new Pair<IMapElement,IMapElement>((IMapElement) ((Unit) b).getValue0(), element));
-        }else if(b instanceof Pair){
-            objects.remove(newPosition);
-            objects.put(newPosition, new Triplet<IMapElement,IMapElement,IMapElement>((IMapElement)((Pair) b).getValue0(), (IMapElement)((Pair) b).getValue1(), element);
-        }
-    }
-
-    public void positionChanged(Vector2d oldPosition, Vector2d newPosition, IMapElement element) {
-        Object a = this.objectAt(oldPosition);
-        if(a==null)
-            throw new IllegalArgumentException("Cannot move map element!\n Given position empty!");
-
-        Object b = this.objectAt(newPosition);
-        if (b instanceof Triplet)
-            throw new IllegalArgumentException("Cannot move map element!\n Destination is full!");
-
-        this.takeOutToMove(a,oldPosition,element);
-        this.putOnPos(b,newPosition,element);
     }
 
 }

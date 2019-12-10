@@ -1,5 +1,10 @@
 package agh.cs.oop1;
 
+import com.google.gson.Gson;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+
 public class Configuration {
     public final int width;
     public final int height;
@@ -12,6 +17,17 @@ public class Configuration {
     Configuration(){
         this.width = this.height = this.startEnergy = this.moveEnergy = this.startAnimals = 0;
         this.jungleRatio = 0;
+    }
+
+    public static Configuration fromJson(final String parametersPath) throws FileNotFoundException {
+        Gson gson = new Gson();
+        try {
+            Configuration config = gson.fromJson(new FileReader(System.getProperty("user.dir") + "/" + parametersPath), Configuration.class);
+            return config;
+        }catch (FileNotFoundException ex){
+            System.out.println("Configuration file not found!\n Path: "+ parametersPath+"\n"+ex.toString());
+            throw ex;
+        }
     }
 
     @Override
