@@ -1,8 +1,6 @@
-package agh.cs.oop1;
+package agh.cs.oop1.simulation;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.ExecutionException;
 
 public class Vector2d{
     public final int x;

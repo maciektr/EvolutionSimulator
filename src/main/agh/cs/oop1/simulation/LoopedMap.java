@@ -1,9 +1,8 @@
-package agh.cs.oop1;
+package agh.cs.oop1.simulation;
 
 import org.javatuples.Triplet;
 import org.javatuples.Unit;
 import org.javatuples.Pair;
-import sun.awt.im.InputMethodAdapter;
 
 
 import java.util.*;
@@ -60,7 +59,7 @@ public class LoopedMap implements IWorldMap, IPositionChangeObserver {
         return new Vector2d(xAfterMove+this.mapLowerLeft.x, yAfterMove+this.mapLowerLeft.y);
     }
 
-    static Vector2d getJungleLowerLeft(Vector2d mapLowerLeft,Vector2d mapUpperRight, int jungleSideA, int jungleSideB){
+    public static Vector2d getJungleLowerLeft(Vector2d mapLowerLeft,Vector2d mapUpperRight, int jungleSideA, int jungleSideB){
         int x = mapUpperRight.x + mapLowerLeft.x;
         int y = mapUpperRight.y + mapLowerLeft.y;
         UnaryOperator<Integer> sgn = k -> {

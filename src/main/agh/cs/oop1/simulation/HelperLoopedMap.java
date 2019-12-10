@@ -1,7 +1,7 @@
-package agh.cs.oop1;
+package agh.cs.oop1.simulation;
 
-class HelperLoopedMap {
-    static Vector2d getUpperRight(Vector2d mapLowerLeft, int mapSideA, int mapSideB){
+public class HelperLoopedMap {
+    public static Vector2d getUpperRight(Vector2d mapLowerLeft, int mapSideA, int mapSideB){
         return mapLowerLeft.add(new Vector2d(mapSideA,mapSideB));
     }
 

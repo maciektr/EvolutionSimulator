@@ -1,4 +1,4 @@
-package agh.cs.oop1;
+package agh.cs.oop1.simulation;
 
 import java.util.ArrayList;
 import java.util.List;

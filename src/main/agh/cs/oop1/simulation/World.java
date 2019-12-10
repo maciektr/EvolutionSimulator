@@ -1,11 +1,7 @@
-package agh.cs.oop1;
+package agh.cs.oop1.simulation;
 
-
-import com.google.gson.Gson;
-import com.google.gson.internal.$Gson$Preconditions;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 public class World {
     private static final String parametersPath = "parameters.json";

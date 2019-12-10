@@ -1,6 +1,5 @@
-package agh.cs.oop1;
+package agh.cs.oop1.simulation;
 
-import java.util.Map;
 import java.util.Random;
 
 public enum MapDirection {

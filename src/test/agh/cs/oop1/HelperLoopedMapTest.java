@@ -1,5 +1,7 @@
 package agh.cs.oop1;
 
+import agh.cs.oop1.simulation.HelperLoopedMap;
+import agh.cs.oop1.simulation.Vector2d;
 import org.junit.Assert;
 import org.junit.Test;
 
