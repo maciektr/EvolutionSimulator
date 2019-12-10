@@ -8,6 +8,8 @@ public class Animal implements IMapElement{
     Vector2d position;
     MapDirection direction;
     IWorldMap map;
+    Genotype genotype;
+
 
     private List<IPositionChangeObserver> observers = new ArrayList<IPositionChangeObserver>();
 
@@ -16,6 +18,7 @@ public class Animal implements IMapElement{
         this.energy = energy;
         this.position = position;
         this.direction = MapDirection.getRandomDirection();
+        this.genotype = Genotype.getRandomGenotype();
         map.place(this);
     }
 
