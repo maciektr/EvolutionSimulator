@@ -4,20 +4,32 @@ import java.util.Random;
 
 public enum MapDirection {
     NORTH,
+    NORTH_EAST,
     EAST,
+    SOUTH_EAST,
     SOUTH,
-    WEST;
+    SOUTH_WEST,
+    WEST,
+    NORTH_WEST;
 
     public String toString(){
         switch(this){
-            case EAST:
-                return "East";
-            case WEST:
-                return "West";
             case NORTH:
                 return "North";
-            default:
+            case NORTH_EAST:
+                return "North east";
+            case EAST:
+                return "East";
+            case SOUTH_EAST:
+                return "South east";
+            case SOUTH:
                 return "South";
+            case SOUTH_WEST:
+                return "South west";
+            case WEST:
+                return "West";
+            default:
+                return "North west";
         }
     }
 
@@ -37,8 +49,18 @@ public enum MapDirection {
                 return new Vector2d(-1,0);
             case NORTH:
                 return new Vector2d(0,1);
-            default:
+            case SOUTH:
                 return new Vector2d(0,-1);
+            case NORTH_EAST:
+                return new Vector2d(1,1);
+            case NORTH_WEST:
+                return new Vector2d(-1,1);
+            case SOUTH_EAST:
+                return new Vector2d(1,-1);
+            case SOUTH_WEST:
+                return new Vector2d(-1,-1);
+            default:
+                return new Vector2d(0,0);
         }
     }
 
