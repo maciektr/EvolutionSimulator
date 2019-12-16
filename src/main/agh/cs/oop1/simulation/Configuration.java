@@ -22,8 +22,7 @@ public class Configuration {
     public static Configuration fromJson(final String parametersPath) throws FileNotFoundException {
         Gson gson = new Gson();
         try {
-            Configuration config = gson.fromJson(new FileReader(System.getProperty("user.dir") + "/" + parametersPath), Configuration.class);
-            return config;
+            return gson.fromJson(new FileReader(System.getProperty("user.dir") + "/" + parametersPath), Configuration.class);
         }catch (FileNotFoundException ex){
             System.out.println("Configuration file not found!\n Path: "+ parametersPath+"\n"+ex.toString());
             throw ex;
