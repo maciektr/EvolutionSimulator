@@ -51,10 +51,8 @@ public class Animal implements IMapElement{
                 Vector2d afterMove = this.position.add(thisMove);
                 afterMove = map.legalPositionAfterMove(afterMove);
 
-                if(this.map.canMoveTo(afterMove)){
-                    this.positionChanged(this.position, afterMove);
-                    this.position = afterMove;
-                }
+                this.positionChanged(this.position, afterMove);
+                this.position = afterMove;
                 break;
         }
     }
@@ -68,4 +66,17 @@ public class Animal implements IMapElement{
         return this.position;
     }
 
+
+    public boolean equals(Object other){
+        if (this == other)
+            return true;
+        if (!(other instanceof Animal))
+            return false;
+        Animal that = (Animal) other;
+        return this.direction == that.direction
+                && this.position == that.position
+                && this.energy == that.energy
+                && this.map.equals(that.map)
+                && this.genotype.equals(that.genotype);
+    }
 }
