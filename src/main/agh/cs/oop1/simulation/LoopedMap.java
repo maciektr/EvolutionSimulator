@@ -11,13 +11,14 @@ import java.util.function.UnaryOperator;
 //Nazwa klasy odgapiona od @DenkoV
 public class LoopedMap implements IWorldMap, IPositionChangeObserver {
     protected List<Animal> animals = new ArrayList<Animal>();
-    protected Map<Vector2d, Iterable> objects = new HashMap<>();
+    protected Map<Vector2d, MapCell> objects = new HashMap<>();
 
+    private final Vector2d mapLowerLeft;
+    private final Vector2d mapUpperRight;
+    private final Vector2d jungleLowerLeft;
+    private final Vector2d jungleUpperRight;
+    private final Random rand = new Random();
 
-    final Vector2d mapLowerLeft;
-    final Vector2d mapUpperRight;
-    final Vector2d jungleLowerLeft;
-    final Vector2d jungleUpperRight;
 
     public LoopedMap(Vector2d mapLowerLeft, Vector2d jungleLowerLeft, int mapSideA, int mapSideB, int jungleSideA, int jungleSideB) {
         HelperLoopedMap.checkIfInputIsLegal(mapSideA,mapSideB,jungleSideA,jungleSideB);
@@ -71,112 +72,64 @@ public class LoopedMap implements IWorldMap, IPositionChangeObserver {
         return new Vector2d(sgn.apply(x)*(Math.abs(x) -jungleSideA)/2+x%2, sgn.apply(y)*(Math.abs(y)-jungleSideB)/2+y%2);
     }
 
-    public Object objectAt(Vector2d position){
-        return objects.get(position);
+
+    private MapCell getMapCell(Vector2d position){
+        return this.objects.get(position);
     }
 
-    private boolean isFree(Vector2d position){
-        return this.objectAt(position) == null;
+    private boolean anyAnimals(Vector2d position){
+        return this.getMapCell(position).animals.isEmpty();
     }
+
 
     public void place(Animal animal){
-        if(!this.isFree(animal.getPosition())){
-            throw new IllegalArgumentException("Cannot place element on map.\n Position "+animal.getPosition().toString() + " is already occupied.");
-        }
-        this.objects.put(animal.getPosition(),new Unit<IMapElement>(animal));
+        MapCell cell = this.objects.get(animal.getPosition());
+        cell.animals.add(animal);
+        this.objects.put(animal.getPosition(),cell);
+
         this.animals.add(animal);
         animal.addObserver(this);
-    }
-
-    public boolean canMoveTo(Vector2d afterMove){
-        if(this.objectAt(afterMove) instanceof Pair){
-            return ((Pair) this.objectAt(afterMove)).getValue0() instanceof Animal
-                    && ((Pair) this.objectAt(afterMove)).getValue1() instanceof Animal;
-        }
-        return !(this.objectAt(afterMove) instanceof Triplet);
     }
 
     public Vector2d getRandomFreePosition(){
         int w = this.mapUpperRight.x - this.mapLowerLeft.x;
         int h = this.mapUpperRight.y - this.mapLowerLeft.y;
-        Random rand = new Random();
 
-        int randW = rand.nextInt(w);
-        int randH = rand.nextInt(h);
+        int randW = this.rand.nextInt(w);
+        int randH = this.rand.nextInt(h);
         int countOperations = 0;
 
-        while(!this.isFree(this.mapLowerLeft.add(new Vector2d(randW, randH)))){
+        while(!this.anyAnimals(this.mapLowerLeft.add(new Vector2d(randW, randH)))){
             if(countOperations > 1000000)
                 throw new RuntimeException("Cannot find random free position on map!");
-            randW = rand.nextInt(w);
-            randH = rand.nextInt(h);
+            randW = this.rand.nextInt(w);
+            randH = this.rand.nextInt(h);
             countOperations++;
         }
 
         return this.mapLowerLeft.add(new Vector2d(randW, randH));
     }
 
-//    private void takeOutToMove(Object a,Vector2d oldPosition, IMapElement element){
-//        if(a instanceof Unit){
-//            objects.remove(oldPosition);
-//
-//        }else if(a instanceof Pair){
-//            if(((Pair) a).getValue0()!= element && ((Pair) a).getValue1() != element)
-//                throw new IllegalArgumentException("Cannot move map element!\n No such element at given position!");
-//
-//            IMapElement untouched = (IMapElement) ((Pair) a).getValue0();
-//            if(((Pair) a).getValue0() == element)
-//                untouched = (IMapElement) ((Pair) a).getValue1();
-//
-//            objects.remove(oldPosition);
-//            objects.put(oldPosition, new Unit<IMapElement>(untouched));
-//
-//        }else if(a instanceof Triplet) {
-//            if(((Triplet) a).getValue0()!= element && ((Triplet) a).getValue1() != element && ((Triplet) a).getValue2() != element)
-//                throw new IllegalArgumentException("Cannot move map element!\n No such element at given position!");
-//
-//            IMapElement untouched1 = (IMapElement)((Triplet) a).getValue0();
-//            IMapElement untouched2 = (IMapElement)((Triplet) a).getValue1();
-//            if(untouched1 == element)
-//                    untouched1 = (IMapElement)((Triplet) a).getValue2();
-//            if(untouched2 == element)
-//                    untouched2 = (IMapElement)((Triplet) a).getValue2();
-//
-//
-//            objects.remove(oldPosition);
-//            objects.put(oldPosition, new Pair<IMapElement, IMapElement>(untouched1, untouched2));
-//
-//        }else
-//            throw new IllegalArgumentException("Cannot move map element!\n Given position corrupted!");
-//    }
-//
-//    void putOnPos(Object b, Vector2d newPosition, IMapElement element){
-//        if(b == null){
-//            objects.put(newPosition, new Unit<IMapElement>(element));
-//        }else if (b instanceof Unit){
-//            objects.remove(newPosition);
-//            objects.put(newPosition, new Pair<IMapElement,IMapElement>((IMapElement) ((Unit) b).getValue0(), element));
-//        }else if(b instanceof Pair){
-//            objects.remove(newPosition);
-//            objects.put(newPosition, new Triplet<IMapElement,IMapElement,IMapElement>((IMapElement)((Pair) b).getValue0(), (IMapElement)((Pair) b).getValue1(), element));
-//        }
-//    }
-
-//    public void positionChanged(Vector2d oldPosition, Vector2d newPosition, IMapElement element) {
-//        Object a = this.objectAt(oldPosition);
-//        if(a==null)
-//            throw new IllegalArgumentException("Cannot move map element!\n Given position empty!");
-//
-//        Object b = this.objectAt(newPosition);
-//        if (b instanceof Triplet)
-//            throw new IllegalArgumentException("Cannot move map element!\n Destination is full!");
-//
-//        this.takeOutToMove(a,oldPosition,element);
-//        this.putOnPos(b,newPosition,element);
-//    }
-
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition, IMapElement element){
-
+        if(element instanceof Animal) {
+            this.getMapCell(oldPosition).removeAnimal((Animal)element);
+            this.getMapCell(newPosition).addAnimal((Animal)element);
+        }
     }
+
+    public boolean equals(Object other){
+        if (this == other)
+            return true;
+        if (!(other instanceof LoopedMap))
+            return false;
+        LoopedMap that = (LoopedMap) other;
+        return this.mapLowerLeft.equals(that.mapLowerLeft)
+                && this.mapUpperRight.equals(that.mapUpperRight)
+                && this.jungleLowerLeft.equals(that.jungleLowerLeft)
+                && this.jungleUpperRight.equals(that.jungleUpperRight)
+                && this.animals.equals(that.animals)
+                && this.objects.equals(that.objects);
+    }
+
 
 }

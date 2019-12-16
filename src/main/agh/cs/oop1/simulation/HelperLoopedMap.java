@@ -15,7 +15,6 @@ public class HelperLoopedMap {
         return true;
     }
 
-
     static boolean checkIfInputIsLegal(Vector2d mapLowerLeft, Vector2d mapUpperRight, Vector2d jungleLowerLeft, Vector2d jungleUpperRight){
         if(jungleLowerLeft.equals(mapLowerLeft))
             throw new IllegalArgumentException("Map lower left and jungle lower left are equal!");
@@ -33,6 +32,4 @@ public class HelperLoopedMap {
 
         return true;
     }
-
-
 }
