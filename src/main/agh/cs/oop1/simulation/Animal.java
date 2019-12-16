@@ -13,13 +13,13 @@ public class Animal implements IMapElement{
 
     private List<IPositionChangeObserver> observers = new ArrayList<IPositionChangeObserver>();
 
-    Animal(IWorldMap map, int energy, Vector2d position){
+    public Animal(IWorldMap map, int energy, Vector2d position){
         this.map = map;
         this.energy = energy;
         this.position = position;
         this.direction = MapDirection.getRandomDirection();
         this.genotype = Genotype.getRandomGenotype();
-        map.place(this);
+        map.placeAnimal(this);
     }
 
     public void addObserver(IPositionChangeObserver observer){

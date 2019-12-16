@@ -1,5 +1,6 @@
 package agh.cs.oop1;
 
+import agh.cs.oop1.simulation.Animal;
 import agh.cs.oop1.simulation.LoopedMap;
 import agh.cs.oop1.simulation.Vector2d;
 import org.junit.Assert;
@@ -21,6 +22,20 @@ public class LoopedMapTest {
         Assert.assertTrue(lowerleft.x >=-2 && lowerleft.x <=0);
         Assert.assertTrue(lowerleft.y >=-2 && lowerleft.y <=0);
 
+    }
+
+    @Test
+    public void testLegalPositionAfterMove(){
+
+    }
+
+    @Test
+    public void testPlaceAnimal(){
+        LoopedMap map = new LoopedMap(10,10, 2, 2);
+        Vector2d position = new Vector2d(1,1);
+//        There is no need to call it directly -> it is called by Animal constructor
+        Animal animal = new Animal(map, 100, position);
+        Assert.assertTrue(map.getMapCell(position).hasAnimal(animal));
     }
 
 }

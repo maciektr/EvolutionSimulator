@@ -73,18 +73,20 @@ public class LoopedMap implements IWorldMap, IPositionChangeObserver {
     }
 
 
-    private MapCell getMapCell(Vector2d position){
+    public MapCell getMapCell(Vector2d position){
         return this.objects.get(position);
     }
 
     private boolean anyAnimals(Vector2d position){
-        return this.getMapCell(position).animals.isEmpty();
+        return this.getMapCell(position).anyAnimals();
     }
 
 
-    public void place(Animal animal){
+    public void placeAnimal(Animal animal){
         MapCell cell = this.objects.get(animal.getPosition());
-        cell.animals.add(animal);
+        if(cell == null)
+            cell = new MapCell();
+        cell.addAnimal(animal);
         this.objects.put(animal.getPosition(),cell);
 
         this.animals.add(animal);

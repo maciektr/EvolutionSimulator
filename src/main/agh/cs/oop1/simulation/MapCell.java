@@ -3,10 +3,10 @@ package agh.cs.oop1.simulation;
 import java.util.PriorityQueue;
 
 public class MapCell {
-    Plant plant;
-    PriorityQueue<Animal> animals = new PriorityQueue<Animal>();
+    private Plant plant;
+    private PriorityQueue<Animal> animals = new PriorityQueue<Animal>();
 
-    MapCell(){
+    public MapCell(){
         this.plant = null;
     }
 
@@ -22,9 +22,18 @@ public class MapCell {
         this.plant = plant;
     }
 
+    public boolean anyAnimals(){
+        return !this.animals.isEmpty();
+    }
+
+    public boolean hasAnimal(Animal animal){
+        return this.animals.contains(animal);
+    }
+
     public Plant removePlant(){
         Plant p = this.plant;
         this.plant = null;
         return p;
     }
+
 }

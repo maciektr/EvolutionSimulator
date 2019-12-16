@@ -1,8 +1,8 @@
 package agh.cs.oop1.simulation;
 
 public class Plant implements IMapElement {
-    Vector2d position;
-    Plant(Vector2d position){
+    private Vector2d position;
+    public Plant(Vector2d position){
         this.position = position;
     }
 
