@@ -35,26 +35,16 @@ public class Animal implements IMapElement{
         }
     }
 
-    public void move(MoveDirection direction){
-        switch(direction){
-            case RIGHT:
-                this.direction = this.direction.next();
-                break;
-            case LEFT:
-                this.direction = this.direction.previous();
-                break;
-            case FORWARD:
-            case BACKWARD:
-                Vector2d thisMove = this.direction.toUnitVector();
-                if(direction == MoveDirection.BACKWARD)
-                    thisMove = thisMove.opposite();
-                Vector2d afterMove = this.position.add(thisMove);
-                afterMove = map.legalPositionAfterMove(afterMove);
+    public void move(MapDirection direction){
+        if(this.direction == direction) {
+            Vector2d thisMove = this.direction.toUnitVector();
+            Vector2d afterMove = this.position.add(thisMove);
+            afterMove = map.legalPositionAfterMove(afterMove);
 
-                this.positionChanged(this.position, afterMove);
-                this.position = afterMove;
-                break;
-        }
+            this.positionChanged(this.position, afterMove);
+            this.position = afterMove;
+        }else
+            this.direction = direction;
     }
 
     @Override

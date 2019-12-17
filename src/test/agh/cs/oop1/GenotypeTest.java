@@ -28,6 +28,11 @@ public class GenotypeTest {
     }
 
     @Test
+    public void testGetMove(){
+
+    }
+
+    @Test
     public void testCross(){
         Genotype gen1 = new Genotype();
         Genotype gen2 = new Genotype();

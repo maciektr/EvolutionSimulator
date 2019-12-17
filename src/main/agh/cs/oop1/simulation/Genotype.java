@@ -49,7 +49,6 @@ public class Genotype {
         return Arrays.equals(this.genotype, that.genotype);
     }
 
-
     public Genotype cross(Genotype other){
         byte[] child = new byte[Genotype.maxGenValue+1];
 
@@ -97,5 +96,9 @@ public class Genotype {
             }
 
         return new Genotype(childGen);
+    }
+
+    public MapDirection getMove(){
+        return MapDirection.values()[this.genotype[Genotype.rand.nextInt(Genotype.genotypeSize)]];
     }
 }
