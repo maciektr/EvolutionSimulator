@@ -18,7 +18,7 @@ public class Animal implements IMapElement{
         this.energy = energy;
         this.position = position;
         this.direction = MapDirection.getRandomDirection();
-        this.genotype = Genotype.getRandomGenotype();
+        this.genotype = new Genotype();
         map.placeAnimal(this);
     }
 
