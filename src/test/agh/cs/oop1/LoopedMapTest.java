@@ -26,7 +26,10 @@ public class LoopedMapTest {
 
     @Test
     public void testLegalPositionAfterMove(){
-
+        LoopedMap map = new LoopedMap(10,10, 2, 2);
+        Assert.assertEquals(new Vector2d(0,0), map.legalPositionAfterMove(new Vector2d(10,10)));
+        Assert.assertEquals(new Vector2d(1,1), map.legalPositionAfterMove(new Vector2d(11,11)));
+        Assert.assertEquals(new Vector2d(9,9), map.legalPositionAfterMove(new Vector2d(-1,-1)));
     }
 
     @Test
@@ -36,6 +39,29 @@ public class LoopedMapTest {
 //        There is no need to call it directly -> it is called by Animal constructor
         Animal animal = new Animal(map, 100, position);
         Assert.assertTrue(map.getMapCell(position).hasAnimal(animal));
+    }
+
+    @Test
+    public void testAnyAnimals(){
+        LoopedMap map = new LoopedMap(10,10, 2, 2);
+        Vector2d position = new Vector2d(1,1);
+        Animal animal = new Animal(map, 100, position);
+        Assert.assertTrue(map.anyAnimals(position));
+        Assert.assertFalse(map.anyAnimals(new Vector2d(4,4)));
+    }
+
+    @Test
+    public void testGetRandomFreePosition(){
+        LoopedMap map = new LoopedMap(10,10, 2, 2);
+        Vector2d position = new Vector2d(1,1);
+        Animal animal = new Animal(map, 100, position);
+
+        Vector2d rndFree = map.getRandomFreePosition();
+        Assert.assertNotEquals(rndFree, position);
+        Assert.assertTrue(rndFree.x < 10 && rndFree.y < 10 && rndFree.x >= 0 && rndFree.y >= 0);
+        Vector2d rndFree2 = map.getRandomFreePosition();
+        Vector2d rndFree3 = map.getRandomFreePosition();
+        Assert.assertTrue(rndFree != rndFree2 || rndFree != rndFree3);
     }
 
 }

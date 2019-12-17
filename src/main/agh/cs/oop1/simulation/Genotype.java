@@ -14,9 +14,13 @@ public class Genotype {
     public static Genotype getRandomGenotype() {
         Genotype gen = new Genotype();
 
-        for (int i = 0; i < gen.genotype.length; i++)
+        for(byte i = 0; i<=maxGenValue; i++)
+            gen.genotype[i] = i;
+
+        for (int i = maxGenValue+1; i < gen.genotype.length; i++)
             gen.genotype[i] = (byte) Genotype.rand.nextInt(maxGenValue+1);
 
+        Arrays.sort(gen.genotype);
         return gen;
     }
 
@@ -43,4 +47,8 @@ public class Genotype {
         return Arrays.equals(this.genotype, that.genotype);
     }
 
+
+    public Genotype cross(Genotype other){
+//        Genotype result = new Genotype();
+    }
 }

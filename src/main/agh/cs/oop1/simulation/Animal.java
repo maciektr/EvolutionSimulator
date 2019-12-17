@@ -76,7 +76,6 @@ public class Animal implements IMapElement{
         return this.direction == that.direction
                 && this.position == that.position
                 && this.energy == that.energy
-                && this.map.equals(that.map)
                 && this.genotype.equals(that.genotype);
     }
 }

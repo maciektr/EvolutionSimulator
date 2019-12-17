@@ -77,8 +77,8 @@ public class LoopedMap implements IWorldMap, IPositionChangeObserver {
         return this.objects.get(position);
     }
 
-    private boolean anyAnimals(Vector2d position){
-        return this.getMapCell(position).anyAnimals();
+    public boolean anyAnimals(Vector2d position){
+        return this.getMapCell(position) != null && this.getMapCell(position).anyAnimals();
     }
 
 
@@ -101,7 +101,7 @@ public class LoopedMap implements IWorldMap, IPositionChangeObserver {
         int randH = this.rand.nextInt(h);
         int countOperations = 0;
 
-        while(!this.anyAnimals(this.mapLowerLeft.add(new Vector2d(randW, randH)))){
+        while(this.anyAnimals(this.mapLowerLeft.add(new Vector2d(randW, randH)))){
             if(countOperations > 1000000)
                 throw new RuntimeException("Cannot find random free position on map!");
             randW = this.rand.nextInt(w);
@@ -118,20 +118,5 @@ public class LoopedMap implements IWorldMap, IPositionChangeObserver {
             this.getMapCell(newPosition).addAnimal((Animal)element);
         }
     }
-
-    public boolean equals(Object other){
-        if (this == other)
-            return true;
-        if (!(other instanceof LoopedMap))
-            return false;
-        LoopedMap that = (LoopedMap) other;
-        return this.mapLowerLeft.equals(that.mapLowerLeft)
-                && this.mapUpperRight.equals(that.mapUpperRight)
-                && this.jungleLowerLeft.equals(that.jungleLowerLeft)
-                && this.jungleUpperRight.equals(that.jungleUpperRight)
-                && this.animals.equals(that.animals)
-                && this.objects.equals(that.objects);
-    }
-
 
 }
