@@ -95,10 +95,27 @@ public class Genotype {
                 child[b]--;
             }
 
+        Arrays.sort(childGen);
         return new Genotype(childGen);
     }
 
     public MapDirection getMove(){
         return MapDirection.values()[this.genotype[Genotype.rand.nextInt(Genotype.genotypeSize)]];
     }
+
+    //TODO:zapisowac liste wystapien w mapie
+
+    @Override
+    public int hashCode() {
+        int base = 12345;
+        int mod = 10^9+7;
+        long h = 0;
+        for(byte b = 0; b<this.genotype.length; b++){
+            h+=(base^(b+1)%mod)*this.genotype[b]%mod;
+            h%=mod;
+        }
+        return (int)(h%mod);
+    }
+
+
 }
