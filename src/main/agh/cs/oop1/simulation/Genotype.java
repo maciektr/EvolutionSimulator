@@ -12,35 +12,31 @@ public class Genotype {
     private final byte[] genotype;
 
     public Genotype(){
-         this.genotype = new byte[maxGenValue+1];
+        this.genotype = new byte[Genotype.genotypeSize];
         for(byte i = 0; i<=maxGenValue; i++)
-            this.genotype[i] = 1;
-
-        byte left = genotypeSize - maxGenValue - 1;
-        while(left > 0){
-            this.genotype[Genotype.rand.nextInt(Genotype.maxGenValue+1)]++;
-            left--;
-        }
+            this.genotype[i] = i;
+        for(int i = Genotype.maxGenValue+1; i<Genotype.genotypeSize; i++)
+            this.genotype[i] = (byte)Genotype.rand.nextInt(Genotype.maxGenValue+1);
+        Arrays.sort(this.genotype);
     }
 
     Genotype(byte[] genotype){
-        if(genotype.length != Genotype.maxGenValue+1)
+        if(genotype.length != Genotype.genotypeSize)
             throw new IllegalArgumentException("Genotype size is not valid!");
         this.genotype = genotype;
     }
 
     public String toString(){
         StringBuilder res= new StringBuilder();
-        for(Byte b : this.getGenotypeAsArrayList())
+        for(Byte b : this.genotype)
             res.append((char) (b + (int) '0'));
         return res.toString();
     }
 
     public ArrayList<Byte> getGenotypeAsArrayList(){
         ArrayList<Byte> res = new ArrayList<>();
-        for(byte i = 0; i<= Genotype.maxGenValue; i++)
-            for(int k =0; k<this.genotype[i]; k++)
-                res.add((Byte)i);
+        for(byte b : this.genotype)
+            res.add((Byte)b);
         return res;
     }
 
@@ -92,6 +88,14 @@ public class Genotype {
             err--;
         }
 
-        return new Genotype(child);
+        byte[] childGen = new byte[Genotype.genotypeSize];
+        int index = 0;
+        for(byte b=0; b<=Genotype.maxGenValue;b++)
+            while(child[b] > 0){
+                childGen[index++] = b;
+                child[b]--;
+            }
+
+        return new Genotype(childGen);
     }
 }
