@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Animal implements IMapElement{
-    int energy;
-    Vector2d position;
-    MapDirection direction;
-    IWorldMap map;
-    Genotype genotype;
-    int numberOfChildrenBorn;
+    private Vector2d position;
+    private MapDirection direction;
+    private IWorldMap map;
+    private Genotype genotype;
+    private int numberOfChildrenBorn;
+    private int energy;
 
     private List<IPositionChangeObserver> observers = new ArrayList<IPositionChangeObserver>();
 
@@ -21,6 +21,10 @@ public class Animal implements IMapElement{
         this.direction = MapDirection.getRandomDirection();
         this.genotype = new Genotype();
         map.placeAnimal(this);
+    }
+    public Animal(IWorldMap map, int energy, Vector2d position, MapDirection direction){
+        this(map,energy, position);
+        this.direction = direction;
     }
 
     public void addObserver(IPositionChangeObserver observer){

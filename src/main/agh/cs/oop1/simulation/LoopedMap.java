@@ -83,12 +83,7 @@ public class LoopedMap implements IWorldMap, IPositionChangeObserver {
 
 
     public void placeAnimal(Animal animal){
-        MapCell cell = this.objects.get(animal.getPosition());
-        if(cell == null)
-            cell = new MapCell();
-        cell.addAnimal(animal);
-        this.objects.put(animal.getPosition(),cell);
-
+        this.addAnimalToCell(animal, animal.getPosition());
         this.animals.add(animal);
         animal.addObserver(this);
     }
@@ -112,10 +107,18 @@ public class LoopedMap implements IWorldMap, IPositionChangeObserver {
         return this.mapLowerLeft.add(new Vector2d(randW, randH));
     }
 
+    private void addAnimalToCell(Animal animal, Vector2d position){
+        MapCell cell = this.getMapCell(position);
+        if(cell == null)
+            cell = new MapCell();
+        cell.addAnimal(animal);
+        this.objects.put(position, cell);
+    }
+
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition, IMapElement element){
         if(element instanceof Animal) {
             this.getMapCell(oldPosition).removeAnimal((Animal)element);
-            this.getMapCell(newPosition).addAnimal((Animal)element);
+            this.addAnimalToCell((Animal)element, newPosition);
         }
     }
 
