@@ -19,17 +19,29 @@ public class GenotypeTest {
 
     @Test
     public void testGetGenotypeAsArrayList(){
-
+        Assert.assertEquals(Genotype.genotypeSize, new Genotype().getGenotypeAsArrayList().size());
+        byte[] gen = new byte[Genotype.genotypeSize];
+        for(byte i = 0; i<Genotype.genotypeSize; i++)
+            gen[i] = i;
+        ArrayList<Byte> received = new Genotype(gen).getGenotypeAsArrayList();
+        for(byte i = 0; i<Genotype.genotypeSize; i++)
+            Assert.assertEquals(gen[i], (byte) received.get(i));
     }
 
     @Test
     public void testToString(){
         Assert.assertEquals(Genotype.genotypeSize, new Genotype().toString().length());
+        byte[] gen = new byte[Genotype.genotypeSize];
+        for(byte i = 0; i<Genotype.genotypeSize; i++)
+            gen[i] = i;
+        String received = new Genotype(gen).toString();
+        for(byte i = 0; i<Genotype.genotypeSize; i++)
+            Assert.assertEquals(gen[i], (int)received.charAt(i) - (int)'0');
     }
 
     @Test
     public void testGetMove(){
-
+        Assert.assertNotNull(new Genotype().getMove());
     }
 
     @Test

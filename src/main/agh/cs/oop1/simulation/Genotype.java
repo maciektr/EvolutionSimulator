@@ -20,7 +20,7 @@ public class Genotype {
         Arrays.sort(this.genotype);
     }
 
-    Genotype(byte[] genotype){
+    public Genotype(byte[] genotype){
         if(genotype.length != Genotype.genotypeSize)
             throw new IllegalArgumentException("Genotype size is not valid!");
         this.genotype = genotype;

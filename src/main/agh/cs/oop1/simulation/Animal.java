@@ -9,11 +9,12 @@ public class Animal implements IMapElement{
     MapDirection direction;
     IWorldMap map;
     Genotype genotype;
-
+    int numberOfChildrenBorn;
 
     private List<IPositionChangeObserver> observers = new ArrayList<IPositionChangeObserver>();
 
     public Animal(IWorldMap map, int energy, Vector2d position){
+        this.numberOfChildrenBorn = 0;
         this.map = map;
         this.energy = energy;
         this.position = position;
