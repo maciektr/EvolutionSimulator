@@ -12,10 +12,12 @@ public class Configuration {
     public final  int moveEnergy;
     public final int startAnimals;
     public final double jungleRatio;
+    public final int plantEnergy;
+    public final int plantsPerEpoch;
 
 
     Configuration(){
-        this.width = this.height = this.startEnergy = this.moveEnergy = this.startAnimals = 0;
+        this.width = this.height = this.startEnergy = this.moveEnergy = this.startAnimals = this.plantEnergy = this.plantsPerEpoch = 0;
         this.jungleRatio = 0;
     }
 
@@ -38,6 +40,9 @@ public class Configuration {
                 ", moveEnergy=" + moveEnergy +
                 ", jungleRatio=" + jungleRatio +
                 ", startAnimals="+ startAnimals +
+                ", jungleRatio=" + jungleRatio +
+                ", plantEnergy=" + plantEnergy +
+                ", plantsPerEpoch" + plantsPerEpoch +
                 '}';
     }
 
