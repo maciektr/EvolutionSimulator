@@ -114,20 +114,29 @@ public class LoopedMap implements IWorldMap, IStateChangeObserver {
         return (this.mapUpperRight.x - this.mapLowerLeft.x) * (this.mapUpperRight.y - this.mapLowerLeft.y);
     }
 
-    public Vector2d getRandomFreeOfGrassPosition(){
-        Vector2d position = this.getRandomPosition();
+    private Vector2d helperGetRandomFreePos(boolean fromJungle){
+        Vector2d position = (fromJungle ? this.getRandomJunglePosition() : this.getRandomPosition());
         int countOperations = 0;
 
         while(this.isPlantSet(position) || this.anyAnimals(position)){
             if(countOperations > this.mapSize()/4)
 //                throw new RuntimeException("Cannot find random free position on map!");
                 return position;
-            position = this.getRandomPosition();
+            position = (fromJungle ? this.getRandomJunglePosition() : this.getRandomPosition());
             countOperations++;
         }
 
         return position;
     }
+
+    public Vector2d getRandomFreeOfGrassPosition(){
+        return this.helperGetRandomFreePos(false);
+    }
+
+    public Vector2d getRandomFreeOfGrassJunglePosition(){
+        return this.helperGetRandomFreePos(true);
+    }
+
 
     private void addAnimalToCell(Animal animal){
         Vector2d position = animal.getPosition();

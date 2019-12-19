@@ -104,6 +104,26 @@ public class LoopedMapTest {
     }
 
     @Test
+    public void testGetRandomFreeOfGrassJunglePosition(){
+        Vector2d mapLowerLeft = new Vector2d(0,0);
+        Vector2d mapUpperRight = new Vector2d(10,10);
+        Vector2d jungleLowerLeft = new Vector2d(4,4);
+        Vector2d jungleUpperRight = new Vector2d(7,7);
+        LoopedMap map = new LoopedMap(mapLowerLeft,jungleLowerLeft,mapUpperRight,jungleUpperRight);
+
+        Vector2d position = new Vector2d(5,5);
+        Animal animal = new Animal(map, 100, position);
+        map.getMapCell(position).setPlant(new Plant(position));
+
+        Vector2d rndFree = map.getRandomFreeOfGrassJunglePosition();
+        Assert.assertFalse(map.isPlantSet(rndFree));
+        Assert.assertFalse(map.anyAnimals(rndFree));
+        Assert.assertNotEquals(rndFree, position);
+        Assert.assertTrue(rndFree.precedes(jungleUpperRight));
+        Assert.assertTrue(rndFree.follows(jungleLowerLeft));
+    }
+
+    @Test
     public void testDied(){
         LoopedMap map = new LoopedMap(10,10, 2, 2);
         Vector2d position = new Vector2d(1,1);

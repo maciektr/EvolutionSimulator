@@ -28,6 +28,11 @@ public class Simulation {
     }
 
     private void setPlants(int plants){
+        for(int i = 0; i<(plants/2); i++){
+            Vector2d pos = this.map.getRandomJunglePosition();
+            this.map.setPlantToCell(new Plant(pos));
+        }
+        plants = plants - (plants/2);
         while(plants > 0){
             Vector2d pos = this.map.getRandomFreeOfGrassPosition();
             this.map.setPlantToCell(new Plant(pos));
