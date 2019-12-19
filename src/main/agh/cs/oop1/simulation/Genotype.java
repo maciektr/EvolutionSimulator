@@ -117,7 +117,6 @@ public class Genotype {
         long mod = 10^9+7;
         long h = 0;
         for(byte b = 0; b<this.genotype.length; b++){
-//            h+=(base^(b+1)%mod)*this.genotype[b]%mod;
             h+=((pow_mod(base, b+1, mod))*(long)this.genotype[b])%mod;
             h%=mod;
         }

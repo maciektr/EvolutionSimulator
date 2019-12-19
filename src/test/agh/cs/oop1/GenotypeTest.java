@@ -64,5 +64,14 @@ public class GenotypeTest {
         Assert.assertEquals(Genotype.genotypeSize, sum);
     }
 
+    @Test
+    public void testHashCode(){
+        byte[] gen_footprint = new byte[Genotype.genotypeSize];
+        for(byte i = 0; i<Genotype.genotypeSize; i++)
+            gen_footprint[i] = i;
+        Genotype gen = new Genotype(gen_footprint);
+        Assert.assertNotEquals(0,gen.hashCode());
+        Assert.assertTrue(gen.hashCode() > 0);
+    }
 
 }
