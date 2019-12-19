@@ -103,19 +103,25 @@ public class Genotype {
         return MapDirection.values()[this.genotype[Genotype.rand.nextInt(Genotype.genotypeSize)]];
     }
 
-    //TODO:zapisowac liste wystapien w mapie
+    //TODO:zapisywac liste wystapien w mapie
+
+    private long pow_mod(long base, long e, long mod){
+        if(e == 0)
+            return 1;
+        return ((pow_mod(((base*base)%mod), e/2, (mod)) *(e % 2 == 0 ? 1:base))%mod);
+    }
 
     @Override
     public int hashCode() {
-        int base = 12345;
-        int mod = 10^9+7;
+        long base = 12345;
+        long mod = 10^9+7;
         long h = 0;
         for(byte b = 0; b<this.genotype.length; b++){
-            h+=(base^(b+1)%mod)*this.genotype[b]%mod;
+//            h+=(base^(b+1)%mod)*this.genotype[b]%mod;
+            h+=((pow_mod(base, b+1, mod))*(long)this.genotype[b])%mod;
             h%=mod;
         }
         return (int)(h%mod);
     }
-
 
 }
