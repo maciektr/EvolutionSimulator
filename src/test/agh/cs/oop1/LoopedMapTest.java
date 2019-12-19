@@ -2,6 +2,7 @@ package agh.cs.oop1;
 
 import agh.cs.oop1.simulation.Animal;
 import agh.cs.oop1.simulation.LoopedMap;
+import agh.cs.oop1.simulation.Plant;
 import agh.cs.oop1.simulation.Vector2d;
 import org.junit.Assert;
 import org.junit.Test;
@@ -51,17 +52,29 @@ public class LoopedMapTest {
     }
 
     @Test
-    public void testGetRandomFreePosition(){
+    public void testGetRandomFreeOfGrassPosition(){
         LoopedMap map = new LoopedMap(10,10, 2, 2);
         Vector2d position = new Vector2d(1,1);
         Animal animal = new Animal(map, 100, position);
+        map.getMapCell(position).setPlant(new Plant(position));
 
-        Vector2d rndFree = map.getRandomFreePosition();
+        Vector2d rndFree = map.getRandomFreeOfGrassPosition();
+        Assert.assertFalse(map.isPlantSet(rndFree));
+        Assert.assertFalse(map.anyAnimals(rndFree));
         Assert.assertNotEquals(rndFree, position);
         Assert.assertTrue(rndFree.x < 10 && rndFree.y < 10 && rndFree.x >= 0 && rndFree.y >= 0);
-        Vector2d rndFree2 = map.getRandomFreePosition();
-        Vector2d rndFree3 = map.getRandomFreePosition();
-        Assert.assertTrue(rndFree != rndFree2 || rndFree != rndFree3);
     }
+
+    @Test
+    public void testIsPlantSet(){
+        LoopedMap map = new LoopedMap(10,10, 2, 2);
+        Vector2d position = new Vector2d(1,1);
+        Plant plant = new Plant(position);
+
+        Assert.assertFalse(map.isPlantSet(position));
+        map.setPlantToCell(plant);
+        Assert.assertTrue(map.isPlantSet(position));
+    }
+
 
 }
