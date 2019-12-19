@@ -110,7 +110,7 @@ public class LoopedMap implements IWorldMap, IStateChangeObserver {
         return this.jungleLowerLeft.add(new Vector2d(randW, randH));
     }
 
-    private int mapSize(){
+    public int mapSize(){
         return (this.mapUpperRight.x - this.mapLowerLeft.x) * (this.mapUpperRight.y - this.mapLowerLeft.y);
     }
 
