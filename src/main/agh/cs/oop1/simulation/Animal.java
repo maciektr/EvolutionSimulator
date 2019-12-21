@@ -65,13 +65,13 @@ public class Animal implements IMapElement{
         }
     }
 
-    private void died(){
-        for(IStateChangeObserver observer : this.observers){
-            observer.died(this);
-        }
-    }
+//    private void died(){
+//        for(IStateChangeObserver observer : this.observers){
+//            observer.died(this);
+//        }
+//    }
 
-    private void energyChanged(){
+    public void energyChanged(){
         for(IStateChangeObserver observer : this.observers){
             observer.energyChanged(this);
         }
@@ -79,10 +79,10 @@ public class Animal implements IMapElement{
 
     public void move(MapDirection direction){
         this.energy -= Animal.energyPerMove;
-        if(this.getEnergy() <= 0) {
-            this.died();
-            return;
-        }
+//        if(this.getEnergy() <= 0) {
+//            this.died();
+//            return;
+//        }
 
         if(this.direction == direction) {
             Vector2d thisMove = this.direction.toUnitVector();
@@ -92,6 +92,7 @@ public class Animal implements IMapElement{
             this.positionChanged(oldPosition, this.position);
         }else
             this.direction = direction;
+        this.energyChanged();
     }
 
     @Override

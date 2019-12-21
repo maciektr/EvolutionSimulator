@@ -16,7 +16,7 @@ public class Vector2d{
     }
 
     public boolean precedes(@NotNull Vector2d other){
-        return this.x <= other.x && this.y<=other.y;
+        return this.x < other.x && this.y<other.y;
     }
 
     public boolean follows(@NotNull Vector2d other){

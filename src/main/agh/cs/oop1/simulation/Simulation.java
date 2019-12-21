@@ -1,8 +1,11 @@
 package agh.cs.oop1.simulation;
 
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import org.javatuples.Pair;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
 
 public class Simulation {
@@ -63,8 +66,11 @@ public class Simulation {
         this.epoch++;
         this.setPlants();
 
+
         HashSet<MapCell> cellsWithAnimals = new HashSet<MapCell>();
-        for(Animal a : this.map.getAnimals()){
+
+        ArrayList<Animal> animals = new ArrayList<Animal>(this.map.getAnimals());
+        for(Animal a : animals){
             a.move(MapDirection.getRandomDirection());
             cellsWithAnimals.add(this.map.getMapCell(a.getPosition()));
         }
@@ -73,8 +79,9 @@ public class Simulation {
             if(cell.numberOfAnimals() == 1){
                 if(!cell.isPlantSet())
                     continue;
-                cell.getMostEnergeticAnimal().addEnergy(cell.removePlant().getEnergy());
-            }else{
+                int gainedRnergy = cell.removePlant().getEnergy();
+                cell.getMostEnergeticAnimal().addEnergy(gainedRnergy);
+            }else if(cell.numberOfAnimals() >= 2){
                 Pair<Animal, Animal> pair= cell.getTwoMostEnergeticAnimals();
                 Animal a1 = pair.getValue0();
                 Animal a2 = pair.getValue1();
@@ -86,5 +93,10 @@ public class Simulation {
 
         }
 
+
+    }
+
+    public LoopedMap getMap(){
+        return this.map;
     }
 }

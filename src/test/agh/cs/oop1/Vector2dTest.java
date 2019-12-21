@@ -28,7 +28,7 @@ public class Vector2dTest {
     @Test
     public void testPrecedes(){
         Assert.assertTrue(new Vector2d(-1,-2).precedes(vector_1_2));
-        Assert.assertTrue(vector_0_0.precedes(vector_0_0));
+        Assert.assertFalse(vector_0_0.precedes(vector_0_0));
         Assert.assertFalse(vector_1_2.precedes(new Vector2d(-1,-2)));
     }
 
