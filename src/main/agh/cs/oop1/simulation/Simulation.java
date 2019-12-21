@@ -43,6 +43,22 @@ public class Simulation {
         this.setPlants(this.config.plantsPerEpoch);
     }
 
+    private Vector2d getChildPos(Vector2d position){
+        Vector2d childpos = position;
+        int m1 = Simulation.rand.nextInt(3);
+        int m2 = Simulation.rand.nextInt(3);
+
+        boolean found = false;
+        for(int i1 = 0; i1<3 && !found; i1++)
+            for(int i2 = 0; i2<3 && !found; i2++){
+                if(!this.map.anyAnimals(this.map.legalPositionAfterMove(childpos.add(new Vector2d((m1+i1)%3 -1, (m2+i2)%3 -1))))){
+                    childpos = childpos.add(new Vector2d((m1+i1)%3 -1, (m2+i2)%3 -1));
+                    found = true;
+                }
+            }
+        return childpos;
+    }
+
     public void nextEpoch() throws IllegalAccessException {
         this.epoch++;
         this.setPlants();
@@ -65,20 +81,7 @@ public class Simulation {
                 if(cell.isPlantSet())
                     a1.addEnergy(cell.removePlant().getEnergy());
 
-                Vector2d childpos = a1.getPosition();
-                int m1 = Simulation.rand.nextInt(3);
-                int m2 = Simulation.rand.nextInt(3);
-
-                boolean found = false;
-                for(int i1 = 0; i1<3 && !found; i1++)
-                    for(int i2 = 0; i2<3 && !found; i2++){
-                        if(!this.map.anyAnimals(this.map.legalPositionAfterMove(childpos.add(new Vector2d((m1+i1)%3 -1, (m2+i2)%3 -1))))){
-                            childpos = childpos.add(new Vector2d((m1+i1)%3 -1, (m2+i2)%3 -1));
-                            found = true;
-                        }
-                    }
-
-                new Animal(this.map, a1.reproduceEnergy()+a2.reproduceEnergy(), childpos);
+                new Animal(this.map, a1.reproduceEnergy()+a2.reproduceEnergy(), this.getChildPos(a1.getPosition()));
             }
 
         }

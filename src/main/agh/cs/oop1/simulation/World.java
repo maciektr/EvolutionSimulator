@@ -10,8 +10,9 @@ public class World {
 
         try {
             final Configuration config = Configuration.fromJson(World.parametersPath);
-            System.out.println(config.toString());
-            LoopedMap map = new LoopedMap(config.width, config.height, config.jungleWidth(), config.jungleHeight());
+//            System.out.println(config.toString());
+            Simulation simulation = new Simulation(config);
+
 
         }catch(FileNotFoundException ex){
             System.out.println("Application cannot be launched!");
