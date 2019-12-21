@@ -2,7 +2,7 @@
   "width": 50,
   "height": 50,
   "jungleRatio": 0.5,
-  "startAnimals":40,
+  "startAnimals":50,
   "startEnergy":300,
   "moveEnergy": 5,
   "plantEnergy":170,

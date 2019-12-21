@@ -16,8 +16,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         try {
             final Configuration config = Configuration.fromJson(Main.parametersPath);
-            new SimulationStage(new Simulation(config));
-
+            new SimulationStage(config);
+//            new SimulationStage(new Simulation(config));
         }catch(FileNotFoundException ex){
             System.out.println("Application cannot be launched!");
         }catch (IllegalArgumentException ex){
