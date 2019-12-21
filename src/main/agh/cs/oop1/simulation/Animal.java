@@ -96,4 +96,8 @@ public class Animal implements IMapElement{
                 && this.energy == that.energy
                 && this.genotype.equals(that.genotype);
     }
+
+    public Genotype getGenotype(){
+        return this.genotype;
+    }
 }

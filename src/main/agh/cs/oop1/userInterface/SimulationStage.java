@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -138,52 +139,69 @@ public class SimulationStage extends Stage {
         this.cellHeight = this.windowHeight/enumerator.numberOfRows();
         this.circleRadius = Math.min(this.cellWidth,this.cellHeight)/2;
 
+        Label epochsCount = new Label("0");
+
         this.drawMap(mapPane);
+        Label theMostPopularGenotype = new Label(this.simulation.getTheMostPopularGenotype().toString());
+
         button2.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 try {
                     nextEpoch();
+                    epochsCount.setText(Integer.toString(simulation.getEpoch()));
+                    theMostPopularGenotype.setText(simulation.getTheMostPopularGenotype().toString());
                 } catch (IllegalAccessException ex) {
                     ex.printStackTrace();
                 }
             }
         });
 
-
         button1.setOnAction(new EventHandler<ActionEvent>() {
-
             @Override public void handle(ActionEvent e) {
+                if(numberOfEpochsField.getText().equals(""))
+                    return;
+
                 int epochs = Integer.parseInt(numberOfEpochsField.getText());
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask(){
                     int counter = 0;
                     @Override
                     public void run() {
-                        System.out.println(counter+ " : "+epochs);
                         if(epochs==++counter){
                             timer.cancel();
                             timer.purge();
                         }
                         Platform.runLater(()-> {
                             try {
+                                if(simulation.getNumberOfAnimals() == 0)
+                                    return;
                                 nextEpoch();
+                                if(simulation.getNumberOfAnimals() == 0)
+                                    return;
+                                epochsCount.setText(Integer.toString(simulation.getEpoch()));
+                                theMostPopularGenotype.setText(simulation.getTheMostPopularGenotype().toString());
                             } catch (IllegalAccessException ex) {
                                 ex.printStackTrace();
                             }
                         });
                     }
                 };
-
-                timer.schedule(task, 0, 400l);
-
+                timer.schedule(task, 0, 40l);
             }
         });
 
 
-        VBox rootPane = new VBox();
-        rootPane.getChildren().addAll(buttonsPane, mapPane);
-        VBox.setVgrow(mapPane, Priority.ALWAYS);
+        GridPane statisticsPane = new GridPane();
+        statisticsPane.setPadding(new Insets(5,5,5,5));
+        statisticsPane.setAlignment(Pos.BOTTOM_CENTER);
+        statisticsPane.add(new Label("Epoch number: "),0,0);
+        statisticsPane.add(epochsCount,1,0);
+        statisticsPane.add(new Label("The most popular genotype: "),0,1);
+        statisticsPane.add(theMostPopularGenotype,1,1);
 
+        VBox rootPane = new VBox();
+        rootPane.getChildren().addAll(buttonsPane, mapPane, statisticsPane);
+        VBox.setVgrow(mapPane, Priority.ALWAYS);
 
         Scene scene = new Scene(rootPane);
         this.setTitle("Evolution Simulator");

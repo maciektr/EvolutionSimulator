@@ -13,6 +13,7 @@ public class Simulation {
     private Configuration config;
     private int epoch = 0;
     private static Random rand = new Random();
+    private Genotype theMostPopularGenotype;
 
     public Simulation(Configuration config){
         this.config = config;
@@ -22,11 +23,13 @@ public class Simulation {
         Animal.setEnergyPerMove(config.moveEnergy);
         int numberOfAnimals = config.startAnimals;
 
+        GenotypePopularityTracker tracker = new GenotypePopularityTracker();
         while(numberOfAnimals > 0){
-            new Animal(map, config.startEnergy, map.getRandomPosition());
+            Animal a = new Animal(map, config.startEnergy, map.getRandomPosition());
+            tracker.spotGenotype(a.getGenotype());
             numberOfAnimals--;
         }
-
+        this.theMostPopularGenotype = tracker.getTheMostPopular();
         this.setPlants();
         this.setOnlyJunglePlants();
     }
@@ -76,7 +79,6 @@ public class Simulation {
         this.epoch++;
         this.setPlants();
 
-
         HashSet<MapCell> cellsWithAnimals = new HashSet<MapCell>();
 
         ArrayList<Animal> animals = new ArrayList<Animal>(this.map.getAnimals());
@@ -85,12 +87,17 @@ public class Simulation {
             cellsWithAnimals.add(this.map.getMapCell(a.getPosition()));
         }
 
+        GenotypePopularityTracker tracker = new GenotypePopularityTracker();
+        for(Animal a : this.map.getAnimals())
+            tracker.spotGenotype(a.getGenotype());
+        this.theMostPopularGenotype = tracker.getTheMostPopular();
+
         for(MapCell cell : cellsWithAnimals){
             if(cell.numberOfAnimals() == 1){
                 if(!cell.isPlantSet())
                     continue;
-                int gainedRnergy = cell.removePlant().getEnergy();
-                cell.getMostEnergeticAnimal().addEnergy(gainedRnergy);
+                int gainedEnergy = cell.removePlant().getEnergy();
+                cell.getMostEnergeticAnimal().addEnergy(gainedEnergy);
             }else if(cell.numberOfAnimals() >= 2){
                 Pair<Animal, Animal> pair= cell.getTwoMostEnergeticAnimals();
                 Animal a1 = pair.getValue0();
@@ -102,8 +109,10 @@ public class Simulation {
             }
 
         }
+    }
 
-
+    public Genotype getTheMostPopularGenotype(){
+        return this.theMostPopularGenotype;
     }
 
     public LoopedMap getMap(){
@@ -111,4 +120,8 @@ public class Simulation {
     }
 
     public int getEpoch(){return epoch;}
+
+    public int getNumberOfAnimals(){
+        return this.map.getAnimals().size();
+    }
 }
