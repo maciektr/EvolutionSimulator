@@ -1,21 +1,29 @@
 package agh.cs.oop1.userInterface;
 
+import agh.cs.oop1.simulation.*;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+
+//import java.awt.*;
+
 public class Main extends Application {
+    private static final String parametersPath = "parameters.json";
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Evolution Simulator");
-        primaryStage.setScene(new Scene(root, 300, 275));
-        primaryStage.show();
+        try {
+            final Configuration config = Configuration.fromJson(Main.parametersPath);
+            new SimulationStage(config);
+//            new SimulationStage(new Simulation(config));
+        }catch(FileNotFoundException ex){
+            System.out.println("Application cannot be launched!");
+        }catch (IllegalArgumentException ex){
+            System.out.println("Illegal configuration! Check parameters.json file.\n"+ex.toString());
+        }
     }
-
 
     public static void main(String[] args) {
         launch(args);

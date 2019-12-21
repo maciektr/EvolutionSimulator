@@ -1,15 +1,19 @@
 package agh.cs.oop1.simulation;
 
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import org.javatuples.Pair;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Random;
 
 public class Simulation {
     private LoopedMap map;
     private Configuration config;
-    int epoch = 0;
+    private int epoch = 0;
     private static Random rand = new Random();
+    private Genotype theMostPopularGenotype;
 
     public Simulation(Configuration config){
         this.config = config;
@@ -19,19 +23,19 @@ public class Simulation {
         Animal.setEnergyPerMove(config.moveEnergy);
         int numberOfAnimals = config.startAnimals;
 
+        GenotypePopularityTracker tracker = new GenotypePopularityTracker();
         while(numberOfAnimals > 0){
-            new Animal(map, config.startEnergy, map.getRandomPosition());
+            Animal a = new Animal(map, config.startEnergy, map.getRandomPosition());
+            tracker.spotGenotype(a.getGenotype());
             numberOfAnimals--;
         }
-
+        this.theMostPopularGenotype = tracker.getTheMostPopular();
         this.setPlants();
+        this.setOnlyJunglePlants();
     }
 
     private void setPlants(int plants){
-        for(int i = 0; i<(plants/2); i++){
-            Vector2d pos = this.map.getRandomJunglePosition();
-            this.map.setPlantToCell(new Plant(pos));
-        }
+        this.setOnlyJunglePlants(plants);
         plants = plants - (plants/2);
         while(plants > 0){
             Vector2d pos = this.map.getRandomFreeOfGrassPosition();
@@ -39,8 +43,20 @@ public class Simulation {
             plants--;
         }
     }
+
     private void setPlants(){
         this.setPlants(this.config.plantsPerEpoch);
+    }
+
+    private void setOnlyJunglePlants(int plants){
+        for(int i = 0; i<(plants/2); i++){
+            Vector2d pos = this.map.getRandomJunglePosition();
+            this.map.setPlantToCell(new Plant(pos));
+        }
+    }
+
+    private void setOnlyJunglePlants(){
+        this.setOnlyJunglePlants(this.config.plantsPerEpoch);
     }
 
     private Vector2d getChildPos(Vector2d position){
@@ -64,17 +80,25 @@ public class Simulation {
         this.setPlants();
 
         HashSet<MapCell> cellsWithAnimals = new HashSet<MapCell>();
-        for(Animal a : this.map.getAnimals()){
+
+        ArrayList<Animal> animals = new ArrayList<Animal>(this.map.getAnimals());
+        for(Animal a : animals){
             a.move(MapDirection.getRandomDirection());
             cellsWithAnimals.add(this.map.getMapCell(a.getPosition()));
         }
+
+        GenotypePopularityTracker tracker = new GenotypePopularityTracker();
+        for(Animal a : this.map.getAnimals())
+            tracker.spotGenotype(a.getGenotype());
+        this.theMostPopularGenotype = tracker.getTheMostPopular();
 
         for(MapCell cell : cellsWithAnimals){
             if(cell.numberOfAnimals() == 1){
                 if(!cell.isPlantSet())
                     continue;
-                cell.getMostEnergeticAnimal().addEnergy(cell.removePlant().getEnergy());
-            }else{
+                int gainedEnergy = cell.removePlant().getEnergy();
+                cell.getMostEnergeticAnimal().addEnergy(gainedEnergy);
+            }else if(cell.numberOfAnimals() >= 2){
                 Pair<Animal, Animal> pair= cell.getTwoMostEnergeticAnimals();
                 Animal a1 = pair.getValue0();
                 Animal a2 = pair.getValue1();
@@ -85,6 +109,19 @@ public class Simulation {
             }
 
         }
+    }
 
+    public Genotype getTheMostPopularGenotype(){
+        return this.theMostPopularGenotype;
+    }
+
+    public LoopedMap getMap(){
+        return this.map;
+    }
+
+    public int getEpoch(){return epoch;}
+
+    public int getNumberOfAnimals(){
+        return this.map.getAnimals().size();
     }
 }

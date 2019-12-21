@@ -110,16 +110,13 @@ public class LoopedMap implements IWorldMap, IStateChangeObserver {
         return this.jungleLowerLeft.add(new Vector2d(randW, randH));
     }
 
-    public int mapSize(){
-        return (this.mapUpperRight.x - this.mapLowerLeft.x) * (this.mapUpperRight.y - this.mapLowerLeft.y);
-    }
 
     private Vector2d helperGetRandomFreePos(boolean fromJungle){
         Vector2d position = (fromJungle ? this.getRandomJunglePosition() : this.getRandomPosition());
         int countOperations = 0;
 
         while(this.isPlantSet(position) || this.anyAnimals(position)){
-            if(countOperations > this.mapSize()/4)
+            if(countOperations > (new MapEnumerator(this).mapSize())/4)
 //                throw new RuntimeException("Cannot find random free position on map!");
                 return position;
             position = (fromJungle ? this.getRandomJunglePosition() : this.getRandomPosition());
@@ -179,7 +176,25 @@ public class LoopedMap implements IWorldMap, IStateChangeObserver {
     }
     public void energyChanged(Animal animal){
         this.removeAnimalFromCell(animal);
-        this.addAnimalToCell(animal);
+        if(animal.getEnergy() <= 0)
+            this.animals.remove(animal);
+        else
+            this.addAnimalToCell(animal);
     }
 
+    public Vector2d getMapLowerLeft(){
+        return mapLowerLeft;
+    }
+    public Vector2d getMapUpperRight(){
+        return mapUpperRight;
+    }
+    public Vector2d getJungleLowerLeft(){
+        return  jungleLowerLeft;
+    }
+    public Vector2d getJungleUpperRight(){
+        return jungleUpperRight;
+    }
+    public List<Animal> getAnimalsList(){
+        return this.animals;
+    }
 }

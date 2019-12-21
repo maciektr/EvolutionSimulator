@@ -14,11 +14,13 @@ public class Configuration {
     public final double jungleRatio;
     public final int plantEnergy;
     public final int plantsPerEpoch;
+    public final boolean dualMode;
 
 
     Configuration(){
         this.width = this.height = this.startEnergy = this.moveEnergy = this.startAnimals = this.plantEnergy = this.plantsPerEpoch = 0;
         this.jungleRatio = 0;
+        this.dualMode = false;
     }
 
     public static Configuration fromJson(final String parametersPath) throws FileNotFoundException {

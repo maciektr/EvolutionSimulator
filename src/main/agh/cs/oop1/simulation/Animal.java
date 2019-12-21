@@ -6,7 +6,6 @@ import java.util.List;
 public class Animal implements IMapElement{
     private static int energyPerMove=0;
     private Vector2d position;
-    private MapDirection direction;
     private IWorldMap map;
     private Genotype genotype;
     private int numberOfChildrenBorn;
@@ -20,13 +19,11 @@ public class Animal implements IMapElement{
         this.energy = energy;
         position = this.map.legalPositionAfterMove(position);
         this.position = position;
-        this.direction = MapDirection.getRandomDirection();
         this.genotype = new Genotype();
         map.placeAnimal(this);
     }
     public Animal(IWorldMap map, int energy, Vector2d position, MapDirection direction){
         this(map,energy, position);
-        this.direction = direction;
     }
 
     public static void setEnergyPerMove(int energyPerMove){
@@ -65,13 +62,7 @@ public class Animal implements IMapElement{
         }
     }
 
-    private void died(){
-        for(IStateChangeObserver observer : this.observers){
-            observer.died(this);
-        }
-    }
-
-    private void energyChanged(){
+    public void energyChanged(){
         for(IStateChangeObserver observer : this.observers){
             observer.energyChanged(this);
         }
@@ -79,24 +70,15 @@ public class Animal implements IMapElement{
 
     public void move(MapDirection direction){
         this.energy -= Animal.energyPerMove;
-        if(this.getEnergy() <= 0) {
-            this.died();
-            return;
-        }
-
-        if(this.direction == direction) {
-            Vector2d thisMove = this.direction.toUnitVector();
-            Vector2d oldPosition = this.position;
-            this.position = map.legalPositionAfterMove(this.position.add(thisMove));
-
-            this.positionChanged(oldPosition, this.position);
-        }else
-            this.direction = direction;
+        Vector2d oldPosition = this.position;
+        this.position = map.legalPositionAfterMove(this.position.add(direction.toUnitVector()));
+        this.positionChanged(oldPosition, this.position);
+        this.energyChanged();
     }
 
     @Override
     public String toString(){
-        return "Animal: "+this.position.toString()+" "+this.direction.toString();
+        return "Animal: "+this.position.toString();
     }
 
     public Vector2d getPosition(){
@@ -110,9 +92,12 @@ public class Animal implements IMapElement{
         if (!(other instanceof Animal))
             return false;
         Animal that = (Animal) other;
-        return this.direction == that.direction
-                && this.position == that.position
+        return this.position == that.position
                 && this.energy == that.energy
                 && this.genotype.equals(that.genotype);
+    }
+
+    public Genotype getGenotype(){
+        return this.genotype;
     }
 }

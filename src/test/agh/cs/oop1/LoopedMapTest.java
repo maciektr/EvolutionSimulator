@@ -83,13 +83,6 @@ public class LoopedMapTest {
     }
 
     @Test
-    public void testMapSize(){
-        LoopedMap map = new LoopedMap(13,154, 2, 2);
-        Assert.assertEquals(13*154, map.mapSize());
-    }
-
-
-    @Test
     public void testGetRandomFreeOfGrassPosition(){
         LoopedMap map = new LoopedMap(10,10, 2, 2);
         Vector2d position = new Vector2d(1,1);
