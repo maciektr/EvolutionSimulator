@@ -92,23 +92,12 @@ public class Main extends Application {
         for(Animal animal : this.simulation.getMap().getAnimalsList()){
             pane.add(this.makeCircle(), enumerator.getColumn(animal.getPosition()),enumerator.getRow(animal.getPosition()));
         }
-
-
     }
 
 
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-//        Setting size for the pane
-//        gridPane.setMinSize(400, 200);
-//        Setting the padding
-//        gridPane.setPadding(new Insets(10, 10, 10, 10));
-//        Setting the vertical and horizontal gaps between the columns
-//        gridPane.setVgap(5);
-//        gridPane.setHgap(5);
-//        Setting the Grid alignment
-//        gridPane.setAlignment(Pos.CENTER);
         try {
             final Configuration config = Configuration.fromJson(Main.parametersPath);
             this.simulation = new Simulation(config);
@@ -132,8 +121,6 @@ public class Main extends Application {
             GridPane mapPane = new GridPane();
             mapPane.setPadding(new Insets(5, 5, 5, 5));
             mapPane.setAlignment(Pos.BOTTOM_CENTER);
-//        mapPane.setVgap(1);
-//        mapPane.setHgap(1);
             MapEnumerator enumerator = new MapEnumerator(this.simulation.getMap());
             this.cellX = this.windowWidth/enumerator.numberOfColumns();
             this.cellY = this.windowHeight/enumerator.numberOfRows();
@@ -142,7 +129,6 @@ public class Main extends Application {
             this.drawMap(mapPane);
             button2.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
-//                    button2.setText("Accepted");
                     try {
                         simulation.nextEpoch();
                         refreshMap(mapPane);
@@ -165,8 +151,6 @@ public class Main extends Application {
             primaryStage.sizeToScene();
 
             primaryStage.show();
-//            System.out.println(primaryStage.resizableProperty());
-//            System.out.println(primaryStage.getWidth() + "x" + primaryStage.getHeight());
         }catch(FileNotFoundException ex){
             System.out.println("Application cannot be launched!");
         }catch (IllegalArgumentException ex){

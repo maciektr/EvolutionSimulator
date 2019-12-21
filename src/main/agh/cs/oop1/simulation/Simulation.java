@@ -28,13 +28,11 @@ public class Simulation {
         }
 
         this.setPlants();
+        this.setOnlyJunglePlants();
     }
 
     private void setPlants(int plants){
-        for(int i = 0; i<(plants/2); i++){
-            Vector2d pos = this.map.getRandomJunglePosition();
-            this.map.setPlantToCell(new Plant(pos));
-        }
+        this.setOnlyJunglePlants(plants);
         plants = plants - (plants/2);
         while(plants > 0){
             Vector2d pos = this.map.getRandomFreeOfGrassPosition();
@@ -42,8 +40,20 @@ public class Simulation {
             plants--;
         }
     }
+
     private void setPlants(){
         this.setPlants(this.config.plantsPerEpoch);
+    }
+
+    private void setOnlyJunglePlants(int plants){
+        for(int i = 0; i<(plants/2); i++){
+            Vector2d pos = this.map.getRandomJunglePosition();
+            this.map.setPlantToCell(new Plant(pos));
+        }
+    }
+
+    private void setOnlyJunglePlants(){
+        this.setOnlyJunglePlants(this.config.plantsPerEpoch);
     }
 
     private Vector2d getChildPos(Vector2d position){

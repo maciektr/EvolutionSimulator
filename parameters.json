@@ -2,10 +2,10 @@
   "width": 20,
   "height": 20,
   "jungleRatio": 0.5,
-  "startAnimals":10,
-  "startEnergy":10,
+  "startAnimals":20,
+  "startEnergy":20,
   "moveEnergy": 1,
-  "plantEnergy":1,
-  "plantsPerEpoch": 15
+  "plantEnergy":2,
+  "plantsPerEpoch": 10
 }
 
