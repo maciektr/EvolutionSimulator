@@ -1,6 +1,6 @@
 package agh.cs.oop1;
 
-import agh.cs.oop1.Vector2d;
+import agh.cs.oop1.simulation.Vector2d;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -72,12 +72,13 @@ public class Vector2dTest {
         Assert.assertNotEquals(vector_1_1, vector_1_1.opposite());
     }
 
-//    @Test
-//    public void mod(){
-//        Assert.assertEquals(vector_1_0,vector_1_2.mod(vector_2_2));
-//        Assert.assertEquals(vector_1_1,vector_1_1.mod(vector_2_2));
-//        Assert.assertNotEquals(vector_2_2, vector_2_2.mod(vector_1_1));
-//    }
+    @Test
+    public void testHashCode(){
+        Assert.assertEquals(0, vector_0_0.hashCode());
+        Assert.assertNotEquals(0, vector_0_2.hashCode());
+        Assert.assertNotEquals(0, vector_1_0.hashCode());
+        Assert.assertNotEquals(0, vector_1_1.hashCode());
 
+    }
 }
 

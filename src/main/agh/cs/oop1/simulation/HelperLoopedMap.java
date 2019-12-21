@@ -1,7 +1,7 @@
-package agh.cs.oop1;
+package agh.cs.oop1.simulation;
 
-class HelperLoopedMap {
-    static Vector2d getUpperRight(Vector2d mapLowerLeft, int mapSideA, int mapSideB){
+public class HelperLoopedMap {
+    public static Vector2d getUpperRight(Vector2d mapLowerLeft, int mapSideA, int mapSideB){
         return mapLowerLeft.add(new Vector2d(mapSideA,mapSideB));
     }
 
@@ -14,7 +14,6 @@ class HelperLoopedMap {
             throw new IllegalArgumentException("Map size can not be equal to jungle size!");
         return true;
     }
-
 
     static boolean checkIfInputIsLegal(Vector2d mapLowerLeft, Vector2d mapUpperRight, Vector2d jungleLowerLeft, Vector2d jungleUpperRight){
         if(jungleLowerLeft.equals(mapLowerLeft))
@@ -33,6 +32,4 @@ class HelperLoopedMap {
 
         return true;
     }
-
-
 }
