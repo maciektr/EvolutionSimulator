@@ -1,6 +1,7 @@
 package agh.cs.oop1.userInterface;
 
 import agh.cs.oop1.simulation.*;
+import com.sun.org.apache.bcel.internal.generic.LADD;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -22,6 +23,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import sun.awt.im.InputMethodAdapter;
 import sun.security.krb5.Config;
 
 import java.util.ArrayList;
@@ -36,16 +38,16 @@ public class SimulationStage extends Stage {
     private int cellHeight;
     private int circleRadius;
 
-    private static Rectangle setRectangleColor(Rectangle rectangle, MapEnumerator enumerator, int c, int r){
+    private static Color setRectangleColor(MapEnumerator enumerator, int c, int r){
         MapCell cell = enumerator.getMapCellByIndex(c,r);
-        rectangle.setFill(Color.LAWNGREEN);
+        Color res = (Color.LAWNGREEN);
         if (enumerator.indexesInJungle(c, r))
-            rectangle.setFill(Color.FORESTGREEN);
+            res=  (Color.FORESTGREEN);
 
         if (cell != null && cell.isPlantSet())
-            rectangle.setFill(Color.DARKGREEN);
+            res = (Color.DARKGREEN);
 
-        return rectangle;
+        return res;
     }
 
     private Circle makeCircle(){
@@ -60,7 +62,8 @@ public class SimulationStage extends Stage {
                 int y = this.cellHeight;
                 MapCell cell = enumerator.getMapCellByIndex(c,r);
 
-                Rectangle rectangle = SimulationStage.setRectangleColor(new Rectangle(x,y), enumerator,c,r);
+                Rectangle rectangle = (new Rectangle(x,y));
+                rectangle.setFill(SimulationStage.setRectangleColor(enumerator,c,r));
                 pane.add(rectangle, c, r);
                 if (cell != null && cell.anyAnimals())
                     pane.add(new Circle(this.circleRadius, Color.ORANGE),c,r);
@@ -79,9 +82,12 @@ public class SimulationStage extends Stage {
             int c = GridPane.getColumnIndex(node);
             int r = GridPane.getRowIndex(node);
             if(node instanceof Rectangle){
-                removalCandidates.add(node);
-                addCandidate.add(SimulationStage.setRectangleColor((Rectangle)node, enumerator, c,r));
-
+                Color color = SimulationStage.setRectangleColor(enumerator, c,r);
+                if(((Rectangle)node).getFill() != color){
+                    removalCandidates.add(node);
+                    ((Rectangle) node).setFill(color);
+                    addCandidate.add(node);
+                }
             }else if(node instanceof Circle){
                 removalCandidates.add(node);
             }
@@ -111,14 +117,22 @@ public class SimulationStage extends Stage {
         return mapPane;
     }
 
-    private GridPane createStatisticsPane(Label epochsCount, Label theMostPopularGenotype){
+    private GridPane createStatisticsPane(Label epochsCount,
+                                          Label theMostPopularGenotype,
+                                          Label animalsCount,
+                                          Label numberOfPlants){
         GridPane statisticsPane = new GridPane();
         statisticsPane.setPadding(new Insets(5,5,5,5));
         statisticsPane.setAlignment(Pos.BOTTOM_CENTER);
         statisticsPane.add(new Label("Epoch number: "),0,0);
         statisticsPane.add(epochsCount,1,0);
-        statisticsPane.add(new Label("The most popular genotype: "),0,1);
-        statisticsPane.add(theMostPopularGenotype,1,1);
+        statisticsPane.add(new Label("Number of animals: "),0,1);
+        statisticsPane.add(animalsCount,1,1);
+        statisticsPane.add(new Label("Number of plants: "),0,2);
+        statisticsPane.add(numberOfPlants, 1,2);
+        statisticsPane.add(new Label("The most popular genotype: "),0,3);
+        statisticsPane.add(theMostPopularGenotype,1,3);
+
         return statisticsPane;
     }
 
@@ -131,12 +145,16 @@ public class SimulationStage extends Stage {
 
 //        Statistics Pane
         Label leftEpochsCount = new Label("0");
+        Label leftAnimalsCount = new Label("0");
+        Label leftNumberOfPlants = new Label("0");
         Label leftTheMostPopularGenotype = new Label(leftSimulation.getTheMostPopularGenotype().toString());
-        GridPane leftStatisticsPane = this.createStatisticsPane(leftEpochsCount,leftTheMostPopularGenotype);
+        GridPane leftStatisticsPane = this.createStatisticsPane(leftEpochsCount,leftTheMostPopularGenotype, leftAnimalsCount, leftNumberOfPlants);
 
         Label rightEpochsCount = config.dualMode ? new Label("0") : null;
+        Label rightAnimalsCount = config.dualMode ? new Label("0") : null;
+        Label rightNumberOfPlants = config.dualMode ? new Label("0") : null;
         Label rightTheMostPopularGenotype =config.dualMode ?new Label(leftSimulation.getTheMostPopularGenotype().toString()): null;
-        GridPane rightStatisticsPane =config.dualMode ?this.createStatisticsPane(rightEpochsCount,rightTheMostPopularGenotype): null;
+        GridPane rightStatisticsPane =config.dualMode ?this.createStatisticsPane(rightEpochsCount,rightTheMostPopularGenotype, rightAnimalsCount, rightNumberOfPlants): null;
 
 
 //        ButtonsPane
@@ -171,11 +189,14 @@ public class SimulationStage extends Stage {
                     nextEpoch(leftMapPane, leftSimulation);
                     leftEpochsCount.setText(Integer.toString(leftSimulation.getEpoch()));
                     leftTheMostPopularGenotype.setText(leftSimulation.getTheMostPopularGenotype().toString());
-
+                    leftAnimalsCount.setText(Integer.toString(leftSimulation.getNumberOfAnimals()));
+                    leftNumberOfPlants.setText(Integer.toString(leftSimulation.getNumberOfPlants()));
                     if(config.dualMode){
                         nextEpoch(rightMapPane, rightSimulation);
                         rightEpochsCount.setText(Integer.toString(rightSimulation.getEpoch()));
+                        rightAnimalsCount.setText(Integer.toString(rightSimulation.getNumberOfAnimals()));
                         rightTheMostPopularGenotype.setText(rightSimulation.getTheMostPopularGenotype().toString());
+                        rightNumberOfPlants.setText(Integer.toString(rightSimulation.getNumberOfPlants()));
 
                     }
                 } catch (IllegalAccessException ex) {
@@ -208,7 +229,8 @@ public class SimulationStage extends Stage {
                                     return;
                                 leftEpochsCount.setText(Integer.toString(leftSimulation.getEpoch()));
                                 leftTheMostPopularGenotype.setText(leftSimulation.getTheMostPopularGenotype().toString());
-
+                                leftAnimalsCount.setText(Integer.toString(leftSimulation.getNumberOfAnimals()));
+                                leftNumberOfPlants.setText(Integer.toString(leftSimulation.getNumberOfPlants()));
                                 if(config.dualMode) {
                                     if (rightSimulation.getNumberOfAnimals() == 0)
                                         return;
@@ -216,7 +238,9 @@ public class SimulationStage extends Stage {
                                     if (rightSimulation.getNumberOfAnimals() == 0)
                                         return;
                                     rightEpochsCount.setText(Integer.toString(rightSimulation.getEpoch()));
+                                    rightAnimalsCount.setText(Integer.toString(rightSimulation.getNumberOfAnimals()));
                                     rightTheMostPopularGenotype.setText(rightSimulation.getTheMostPopularGenotype().toString());
+                                    rightNumberOfPlants.setText(Integer.toString(rightSimulation.getNumberOfPlants()));
                                 }
                             } catch (IllegalAccessException ex) {
                                 ex.printStackTrace();
@@ -229,24 +253,24 @@ public class SimulationStage extends Stage {
         });
 
 //        Application window
-        HBox maps = new HBox();
-        maps.getChildren().add(leftMapPane);
+        GridPane maps = new GridPane();
+        maps.add(leftMapPane,0,0);
         if(config.dualMode)
-            maps.getChildren().add(rightMapPane);
+            maps.add(rightMapPane,1,0);
 
-        HBox statistics = new HBox();
-        statistics.getChildren().add(leftStatisticsPane);
+//        HBox statistics = new HBox();
+        maps.add(leftStatisticsPane,0,1);
         if(config.dualMode)
-            statistics.getChildren().add(rightStatisticsPane);
+            maps.add(rightStatisticsPane,1,1);
 
         VBox rootPane = new VBox();
-        rootPane.getChildren().addAll(buttonsPane, maps, statistics);
+        rootPane.getChildren().addAll(buttonsPane, maps);
         VBox.setVgrow(leftMapPane, Priority.ALWAYS);
 
         Scene scene = new Scene(rootPane);
         this.setTitle("Evolution Simulator");
         this.setScene(scene);
-//            primaryStage.setResizable(false);
+//        this.setResizable(false);
         this.sizeToScene();
 
         this.show();

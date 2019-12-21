@@ -14,6 +14,7 @@ public class Simulation {
     private int epoch = 0;
     private static Random rand = new Random();
     private Genotype theMostPopularGenotype;
+    private  int numberOfPlants = 0;
 
     public Simulation(Configuration config){
         this.config = config;
@@ -39,6 +40,9 @@ public class Simulation {
         plants = plants - (plants/2);
         while(plants > 0){
             Vector2d pos = this.map.getRandomFreeOfGrassPosition();
+            if(this.map.getMapCell(pos)==null ||(this.map.getMapCell(pos)!=null && !this.map.getMapCell(pos).isPlantSet()))
+                this.numberOfPlants++;
+
             this.map.setPlantToCell(new Plant(pos));
             plants--;
         }
@@ -51,6 +55,9 @@ public class Simulation {
     private void setOnlyJunglePlants(int plants){
         for(int i = 0; i<(plants/2); i++){
             Vector2d pos = this.map.getRandomJunglePosition();
+            if(this.map.getMapCell(pos)==null ||(this.map.getMapCell(pos)!=null && !this.map.getMapCell(pos).isPlantSet()))
+                this.numberOfPlants++;
+
             this.map.setPlantToCell(new Plant(pos));
         }
     }
@@ -97,14 +104,16 @@ public class Simulation {
                 if(!cell.isPlantSet())
                     continue;
                 int gainedEnergy = cell.removePlant().getEnergy();
+                this.numberOfPlants--;
                 cell.getMostEnergeticAnimal().addEnergy(gainedEnergy);
             }else if(cell.numberOfAnimals() >= 2){
                 Pair<Animal, Animal> pair= cell.getTwoMostEnergeticAnimals();
                 Animal a1 = pair.getValue0();
                 Animal a2 = pair.getValue1();
-                if(cell.isPlantSet())
+                if(cell.isPlantSet()) {
                     a1.addEnergy(cell.removePlant().getEnergy());
-
+                    this.numberOfPlants--;
+                }
                 new Animal(this.map, a1.reproduceEnergy()+a2.reproduceEnergy(), this.getChildPos(a1.getPosition()));
             }
 
@@ -123,5 +132,8 @@ public class Simulation {
 
     public int getNumberOfAnimals(){
         return this.map.getAnimals().size();
+    }
+    public int getNumberOfPlants(){
+        return this.numberOfPlants;
     }
 }
