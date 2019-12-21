@@ -11,7 +11,7 @@ import java.util.Random;
 public class Simulation {
     private LoopedMap map;
     private Configuration config;
-    int epoch = 0;
+    private int epoch = 0;
     private static Random rand = new Random();
 
     public Simulation(Configuration config){
@@ -109,4 +109,6 @@ public class Simulation {
     public LoopedMap getMap(){
         return this.map;
     }
+
+    public int getEpoch(){return epoch;}
 }
