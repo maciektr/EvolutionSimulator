@@ -37,9 +37,9 @@ public class SimulationPane extends VBox {
         this.drawMap();
 
         this.epochsCount.setText(Integer.toString(simulation.getEpoch()));
-        this.theMostPopularGenotype.setText(simulation.getTheMostPopularGenotype() != null ? simulation.getTheMostPopularGenotype().toString():"");
+        this.theMostPopularGenotype.setText(simulation.getStatistics().getTheMostPopularGenotype() != null ? simulation.getStatistics().getTheMostPopularGenotype().toString():"");
         this.animalsCount.setText(Integer.toString(simulation.getNumberOfAnimals()));
-        this.numberOfPlants.setText(Integer.toString(simulation.getNumberOfPlants()));
+        this.numberOfPlants.setText(Integer.toString(simulation.getStatistics().getNumberOfPlants()));
         this.averageEnergy.setText(Integer.toString(config.startEnergy));
 
         GridPane statisticsPane = this.createStatisticsPane();
@@ -141,12 +141,12 @@ public class SimulationPane extends VBox {
         this.simulation.nextEpoch();
         refreshMap();
         epochsCount.setText(Integer.toString(simulation.getEpoch()));
-        theMostPopularGenotype.setText(simulation.getTheMostPopularGenotype() != null ? simulation.getTheMostPopularGenotype().toString():"");
+        theMostPopularGenotype.setText(simulation.getStatistics().getTheMostPopularGenotype() != null ? simulation.getStatistics().getTheMostPopularGenotype().toString():"");
         animalsCount.setText(Integer.toString(simulation.getNumberOfAnimals()));
-        numberOfPlants.setText(Integer.toString(simulation.getNumberOfPlants()));
-        this.averageEnergy.setText(Integer.toString(simulation.getAverageEnergy()));
-        this.averageDeadAnimalEpoch.setText(simulation.getAverageDeadAnimalEpoch() == 0 ? "":Integer.toString(simulation.getAverageDeadAnimalEpoch()));
-        this.averageNumberOfChildren.setText(Integer.toString(simulation.getAverageNumberOfChildren()));
+        numberOfPlants.setText(Integer.toString(simulation.getStatistics().getNumberOfPlants()));
+        this.averageEnergy.setText(Integer.toString(simulation.getStatistics().getAverageEnergy()));
+        this.averageDeadAnimalEpoch.setText(simulation.getStatistics().getAverageDeadAnimalEpoch() == 0 ? "":Integer.toString(simulation.getStatistics().getAverageDeadAnimalEpoch()));
+        this.averageNumberOfChildren.setText(Integer.toString(simulation.getStatistics().getAverageNumberOfChildren()));
     }
 
 }

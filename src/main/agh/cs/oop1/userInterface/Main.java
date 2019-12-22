@@ -2,12 +2,8 @@ package agh.cs.oop1.userInterface;
 
 import agh.cs.oop1.simulation.*;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.stage.Stage;
-
 import java.io.FileNotFoundException;
-
-//import java.awt.*;
 
 public class Main extends Application {
     private static final String parametersPath = "parameters.json";
@@ -17,7 +13,6 @@ public class Main extends Application {
         try {
             final Configuration config = Configuration.fromJson(Main.parametersPath);
             new SimulationStage(config);
-//            new SimulationStage(new Simulation(config));
         }catch(FileNotFoundException ex){
             System.out.println("Application cannot be launched!");
         }catch (IllegalArgumentException ex){

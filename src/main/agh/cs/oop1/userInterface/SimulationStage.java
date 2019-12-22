@@ -40,7 +40,6 @@ public class SimulationStage extends Stage {
             }
         });
 
-
         Button buttonRun = new Button("Run");
         Button buttonNextEpoch = new Button("Next epoch");
         Button buttonStop = new Button("Stop");
@@ -59,7 +58,7 @@ public class SimulationStage extends Stage {
 
         buttonSaveToFile.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                
+
             }
         });
 
