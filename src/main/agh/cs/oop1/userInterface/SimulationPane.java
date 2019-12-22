@@ -131,12 +131,10 @@ public class SimulationPane extends VBox {
     }
 
     public void nextEpoch() throws IllegalAccessException {
-        if(this.simulation.getNumberOfAnimals() <= 0)
-            return;
         this.simulation.nextEpoch();
         refreshMap();
         epochsCount.setText(Integer.toString(simulation.getEpoch()));
-        theMostPopularGenotype.setText(simulation.getTheMostPopularGenotype().toString());
+        theMostPopularGenotype.setText(simulation.getTheMostPopularGenotype() != null ? simulation.getTheMostPopularGenotype().toString():"");
         animalsCount.setText(Integer.toString(simulation.getNumberOfAnimals()));
         numberOfPlants.setText(Integer.toString(simulation.getNumberOfPlants()));
 

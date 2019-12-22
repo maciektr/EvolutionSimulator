@@ -3,7 +3,6 @@ package agh.cs.oop1.userInterface;
 import agh.cs.oop1.simulation.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -19,9 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class SimulationStage extends Stage {
 
@@ -45,17 +41,21 @@ public class SimulationStage extends Stage {
         });
 
 
-        Button button1 = new Button("Run");
-        Button button2 = new Button("Next epoch");
+        Button buttonRun = new Button("Run");
+        Button buttonNextEpoch = new Button("Next epoch");
+        Button buttonStop = new Button("Stop");
+
         buttonsPane.add(text1, 0, 0);
         buttonsPane.add(numberOfEpochsField, 1, 0);
-        buttonsPane.add(button1, 2, 0);
-        buttonsPane.add(button2, 3, 0);
+        buttonsPane.add(buttonRun, 2, 0);
+        buttonsPane.add(buttonNextEpoch, 3, 0);
+        buttonsPane.add(buttonStop, 4,0);
+
         buttonsPane.setAlignment(Pos.TOP_CENTER);
         buttonsPane.setPadding(new Insets(10, 10, 0, 10));
         buttonsPane.setHgap(10);
 
-        button2.setOnAction(new EventHandler<ActionEvent>() {
+        buttonNextEpoch.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 try {
                     left.nextEpoch();
@@ -67,28 +67,37 @@ public class SimulationStage extends Stage {
             }
         });
 
-        button1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                if(numberOfEpochsField.getText().equals(""))
-                    return;
+        Timeline timelineNextEpochs = new Timeline(new KeyFrame(Duration.millis(40), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    left.nextEpoch();
+                    if(config.dualMode)
+                        right.nextEpoch();
+                } catch (IllegalAccessException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }));
 
-                int epochs = Integer.parseInt(numberOfEpochsField.getText());
-                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(40), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        try {
-                            left.nextEpoch();
-                            if(config.dualMode)
-                                right.nextEpoch();
-                        } catch (IllegalAccessException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                }));
-                timeline.setCycleCount(epochs);
-                timeline.play();
+        buttonRun.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                if(numberOfEpochsField.getText().equals("")){
+                    timelineNextEpochs.setCycleCount(Timeline.INDEFINITE);
+                }else {
+                    int epochs = Integer.parseInt(numberOfEpochsField.getText());
+                    timelineNextEpochs.setCycleCount(epochs);
+                }
+                timelineNextEpochs.play();
             }
         });
+
+        buttonStop.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                timelineNextEpochs.stop();
+            }
+        });
+
 
         HBox maps = new HBox();
         maps.getChildren().add(left);
