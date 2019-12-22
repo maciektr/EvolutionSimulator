@@ -149,4 +149,8 @@ public class SimulationPane extends VBox {
         this.averageNumberOfChildren.setText(Integer.toString(simulation.getStatistics().getAverageNumberOfChildren()));
     }
 
+    public Statistics getStatistics(){
+        return this.simulation.getStatistics();
+    }
+
 }

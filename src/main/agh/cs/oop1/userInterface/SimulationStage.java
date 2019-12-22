@@ -1,6 +1,7 @@
 package agh.cs.oop1.userInterface;
 
 import agh.cs.oop1.simulation.*;
+import com.google.gson.Gson;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
@@ -18,6 +19,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.*;
 
 public class SimulationStage extends Stage {
 
@@ -58,6 +61,15 @@ public class SimulationStage extends Stage {
 
         buttonSaveToFile.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
+                try {
+                    if(config.dualMode) {
+                        saveStatisticsToFile(left, "Left");
+                        saveStatisticsToFile(right, "Right");
+                    }else
+                        saveStatisticsToFile(left, "Main");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
 
             }
         });
@@ -122,5 +134,12 @@ public class SimulationStage extends Stage {
 
         this.show();
 
+    }
+
+    private void saveStatisticsToFile(SimulationPane simulationPane, String name) throws IOException {
+        try(Writer writer = new FileWriter("EvolutionalSimulatorStatistics_nEpochs"+simulationPane.getStatistics().getEpoch()+"_"+name+".json")) {
+            Gson gson = new Gson();
+            gson.toJson(simulationPane.getStatistics(), writer);
+        }
     }
 }

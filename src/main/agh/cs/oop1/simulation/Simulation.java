@@ -8,7 +8,7 @@ import java.util.Random;
 public class Simulation {
     private LoopedMap map;
     private Configuration config;
-    private int epoch = 0;
+//    private int epoch = 0;
     private static Random rand = new Random();
     private Statistics statistics;
 
@@ -78,7 +78,8 @@ public class Simulation {
     }
 
     public void nextEpoch() throws IllegalAccessException {
-        this.epoch++;
+//        this.epoch++;
+        this.statistics.spotEpoch();
         this.setPlants();
 
         HashSet<MapCell> cellsWithAnimals = new HashSet<MapCell>();
@@ -87,7 +88,7 @@ public class Simulation {
             a.move(MapDirection.getRandomDirection());
             cellsWithAnimals.add(this.map.getMapCell(a.getPosition()));
             if(a.getEnergy() <= 0){
-                this.statistics.spotDeadAnimal(this.epoch);
+                this.statistics.spotDeadAnimal(this.statistics.getEpoch());
             }
         }
 
@@ -119,7 +120,7 @@ public class Simulation {
         return this.map;
     }
 
-    public int getEpoch(){return epoch;}
+    public int getEpoch(){return this.statistics.getEpoch();}
 
     public int getNumberOfAnimals(){
         return this.map.getAnimals().size();

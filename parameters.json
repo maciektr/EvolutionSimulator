@@ -7,7 +7,6 @@
   "moveEnergy": 5,
   "plantEnergy":170,
   "plantsPerEpoch": 1,
-  "dualMode" : true,
-  "statisticsSavePath": ""
+  "dualMode" : true
 }
 

@@ -10,9 +10,17 @@ public class Statistics {
     private int averageEnergy = 0;
     private int numberOfAnimals = 0;
     private Genotype theMostPopularGenotype;
+    private int epoch =0;
 
     public Statistics(Genotype theMostPopularGenotype){
         this.theMostPopularGenotype = theMostPopularGenotype;
+    }
+
+    public int getEpoch(){
+        return this.epoch;
+    }
+    public void spotEpoch(){
+        this.epoch++;
     }
 
     public int getAverageDeadAnimalEpoch(){
@@ -77,6 +85,5 @@ public class Statistics {
         this.setTheMostPopularGenotype(tracker);
         this.setAverageEnergy(animals.size(), energySum);
         this.setNumberOfChildren(numberOfChildren);
-
     }
 }
