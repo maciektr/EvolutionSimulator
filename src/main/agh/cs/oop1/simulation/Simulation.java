@@ -83,6 +83,13 @@ public class Simulation {
         return childpos;
     }
 
+    private int deadAnimalsCount = 0;
+    private int deadAnimalsEpochsSum = 0;
+
+    public int getAverageDeadAnimalEpoch(){
+        return this.deadAnimalsCount != 0 ? this.deadAnimalsEpochsSum / this.deadAnimalsCount : 0;
+    }
+
     public void nextEpoch() throws IllegalAccessException {
         this.epoch++;
         this.setPlants();
@@ -93,6 +100,10 @@ public class Simulation {
         for(Animal a : animals){
             a.move(MapDirection.getRandomDirection());
             cellsWithAnimals.add(this.map.getMapCell(a.getPosition()));
+            if(a.getEnergy() <= 0){
+                this.deadAnimalsCount++;
+                this.deadAnimalsEpochsSum+=this.epoch;
+            }
         }
 
         GenotypePopularityTracker tracker = new GenotypePopularityTracker();
@@ -102,7 +113,8 @@ public class Simulation {
             this.averageEnergy += a.getEnergy();
         }
         this.theMostPopularGenotype = tracker.getTheMostPopular();
-        this.averageEnergy /= this.getNumberOfAnimals();
+        if(this.getNumberOfAnimals() != 0)
+            this.averageEnergy /= this.getNumberOfAnimals();
 
         for(MapCell cell : cellsWithAnimals){
             if(cell.numberOfAnimals() == 1){
