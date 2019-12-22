@@ -27,6 +27,12 @@ public class SimulationPane extends VBox {
     private Label animalsCount = new Label("0");
     private Label numberOfPlants = new Label("0");
     private Label theMostPopularGenotype = new Label("");
+    private Label averageEnergy = new Label("0");
+
+    /*
+    średniej długości życia zwierząt dla martwych zwierząt,
+    średniej liczby dzieci dla żyjących ziwerząt.
+    */
 
     SimulationPane(Configuration config){
         this.simulation = new Simulation(config);
@@ -37,9 +43,9 @@ public class SimulationPane extends VBox {
         this.theMostPopularGenotype.setText(simulation.getTheMostPopularGenotype() != null ? simulation.getTheMostPopularGenotype().toString():"");
         this.animalsCount.setText(Integer.toString(simulation.getNumberOfAnimals()));
         this.numberOfPlants.setText(Integer.toString(simulation.getNumberOfPlants()));
+        this.averageEnergy.setText(Integer.toString(config.startEnergy));
 
-
-        GridPane statisticsPane = this.createStatisticsPane(epochsCount, theMostPopularGenotype, animalsCount, numberOfPlants);
+        GridPane statisticsPane = this.createStatisticsPane();
         this.getChildren().addAll(this.mapPane, statisticsPane);
     }
     private GridPane createMapPane(){
@@ -69,10 +75,7 @@ public class SimulationPane extends VBox {
             }
     }
 
-    private GridPane createStatisticsPane(Label epochsCount,
-                                          Label theMostPopularGenotype,
-                                          Label animalsCount,
-                                          Label numberOfPlants){
+    private GridPane createStatisticsPane(){
         GridPane statisticsPane = new GridPane();
         statisticsPane.setPadding(new Insets(5,5,5,5));
         statisticsPane.setAlignment(Pos.BOTTOM_CENTER);
@@ -84,6 +87,8 @@ public class SimulationPane extends VBox {
         statisticsPane.add(numberOfPlants, 1,2);
         statisticsPane.add(new Label("The most popular genotype: "),0,3);
         statisticsPane.add(theMostPopularGenotype,1,3);
+        statisticsPane.add(new Label("Average animal energy: "),0,4);
+        statisticsPane.add(this.averageEnergy, 1,4);
 
         return statisticsPane;
     }
@@ -139,6 +144,7 @@ public class SimulationPane extends VBox {
         theMostPopularGenotype.setText(simulation.getTheMostPopularGenotype() != null ? simulation.getTheMostPopularGenotype().toString():"");
         animalsCount.setText(Integer.toString(simulation.getNumberOfAnimals()));
         numberOfPlants.setText(Integer.toString(simulation.getNumberOfPlants()));
+        this.averageEnergy.setText(Integer.toString(simulation.getAverageEnergy()));
 
     }
 

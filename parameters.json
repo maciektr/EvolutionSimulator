@@ -7,6 +7,6 @@
   "moveEnergy": 5,
   "plantEnergy":170,
   "plantsPerEpoch": 1,
-  "dualMode" : false
+  "dualMode" : true
 }
 

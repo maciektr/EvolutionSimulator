@@ -15,6 +15,7 @@ public class Simulation {
     private static Random rand = new Random();
     private Genotype theMostPopularGenotype;
     private  int numberOfPlants = 0;
+    private int averageEnergy = 0;
 
     public Simulation(Configuration config){
         this.config = config;
@@ -95,9 +96,13 @@ public class Simulation {
         }
 
         GenotypePopularityTracker tracker = new GenotypePopularityTracker();
-        for(Animal a : this.map.getAnimals())
+        this.averageEnergy = 0;
+        for(Animal a : this.map.getAnimals()) {
             tracker.spotGenotype(a.getGenotype());
+            this.averageEnergy += a.getEnergy();
+        }
         this.theMostPopularGenotype = tracker.getTheMostPopular();
+        this.averageEnergy /= this.getNumberOfAnimals();
 
         for(MapCell cell : cellsWithAnimals){
             if(cell.numberOfAnimals() == 1){
@@ -127,13 +132,12 @@ public class Simulation {
     public LoopedMap getMap(){
         return this.map;
     }
-
     public int getEpoch(){return epoch;}
-
     public int getNumberOfAnimals(){
         return this.map.getAnimals().size();
     }
     public int getNumberOfPlants(){
         return this.numberOfPlants;
     }
+    public int getAverageEnergy(){return this.averageEnergy;}
 }
