@@ -26,18 +26,21 @@ public class SimulationPane extends VBox {
     private Label epochsCount = new Label("0");
     private Label animalsCount = new Label("0");
     private Label numberOfPlants = new Label("0");
-    private Label theMostPopularGenotype;
+    private Label theMostPopularGenotype = new Label("");
 
     SimulationPane(Configuration config){
         this.simulation = new Simulation(config);
         this.mapPane = this.createMapPane();
         this.drawMap();
-        this.theMostPopularGenotype = new Label(this.simulation.getTheMostPopularGenotype().toString());
+
+        this.epochsCount.setText(Integer.toString(simulation.getEpoch()));
+        this.theMostPopularGenotype.setText(simulation.getTheMostPopularGenotype() != null ? simulation.getTheMostPopularGenotype().toString():"");
+        this.animalsCount.setText(Integer.toString(simulation.getNumberOfAnimals()));
+        this.numberOfPlants.setText(Integer.toString(simulation.getNumberOfPlants()));
+
+
         GridPane statisticsPane = this.createStatisticsPane(epochsCount, theMostPopularGenotype, animalsCount, numberOfPlants);
-
         this.getChildren().addAll(this.mapPane, statisticsPane);
-
-
     }
     private GridPane createMapPane(){
         GridPane mapPane = new GridPane();
@@ -63,7 +66,6 @@ public class SimulationPane extends VBox {
                 this.mapPane.add(rectangle, c, r);
                 if (cell != null && cell.anyAnimals())
                     this.mapPane.add(new Circle(this.circleRadius, Color.ORANGE),c,r);
-
             }
     }
 
