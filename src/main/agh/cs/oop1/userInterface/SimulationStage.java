@@ -1,6 +1,8 @@
 package agh.cs.oop1.userInterface;
 
 import agh.cs.oop1.simulation.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,6 +18,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -62,7 +66,6 @@ public class SimulationStage extends Stage {
                 }
             }
         });
-        Timer timer = new Timer();
 
         button1.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -70,27 +73,20 @@ public class SimulationStage extends Stage {
                     return;
 
                 int epochs = Integer.parseInt(numberOfEpochsField.getText());
-                TimerTask task = new TimerTask(){
-                    int counter = 0;
+                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(40), new EventHandler<ActionEvent>() {
                     @Override
-                    public void run() {
-                        if(epochs==++counter){
-                            timer.cancel();
-                            timer.purge();
+                    public void handle(ActionEvent event) {
+                        try {
+                            left.nextEpoch();
+                            if(config.dualMode)
+                                right.nextEpoch();
+                        } catch (IllegalAccessException ex) {
+                            ex.printStackTrace();
                         }
-                        System.out.println("ADD");
-                        Platform.runLater(()-> {
-                            try {
-                                left.nextEpoch();
-                                if(config.dualMode)
-                                    right.nextEpoch();
-                            } catch (IllegalAccessException ex) {
-                                ex.printStackTrace();
-                            }
-                        });
                     }
-                };
-                timer.schedule(task, 0, 40l);
+                }));
+                timeline.setCycleCount(epochs);
+                timeline.play();
             }
         });
 
