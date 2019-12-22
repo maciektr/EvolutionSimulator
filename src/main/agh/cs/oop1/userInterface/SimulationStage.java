@@ -44,16 +44,24 @@ public class SimulationStage extends Stage {
         Button buttonRun = new Button("Run");
         Button buttonNextEpoch = new Button("Next epoch");
         Button buttonStop = new Button("Stop");
+        Button buttonSaveToFile = new Button("Save to file");
 
         buttonsPane.add(text1, 0, 0);
         buttonsPane.add(numberOfEpochsField, 1, 0);
         buttonsPane.add(buttonRun, 2, 0);
         buttonsPane.add(buttonNextEpoch, 3, 0);
         buttonsPane.add(buttonStop, 4,0);
+        buttonsPane.add(buttonSaveToFile,5,0);
 
         buttonsPane.setAlignment(Pos.TOP_CENTER);
         buttonsPane.setPadding(new Insets(10, 10, 0, 10));
         buttonsPane.setHgap(10);
+
+        buttonSaveToFile.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                
+            }
+        });
 
         buttonNextEpoch.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {

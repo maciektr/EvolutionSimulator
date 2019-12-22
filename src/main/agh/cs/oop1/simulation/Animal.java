@@ -100,4 +100,12 @@ public class Animal implements IMapElement{
     public Genotype getGenotype(){
         return this.genotype;
     }
+
+    public void spotChild(){
+        this.numberOfChildrenBorn++;
+    }
+
+    public int getNumberOfChildren(){
+        return this.numberOfChildrenBorn;
+    }
 }

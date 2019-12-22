@@ -1,11 +1,9 @@
 package agh.cs.oop1.simulation;
 
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Random;
 
 public class Simulation {
@@ -90,6 +88,8 @@ public class Simulation {
         return this.deadAnimalsCount != 0 ? this.deadAnimalsEpochsSum / this.deadAnimalsCount : 0;
     }
 
+    private int numberOfChildren = 0;
+
     public void nextEpoch() throws IllegalAccessException {
         this.epoch++;
         this.setPlants();
@@ -106,16 +106,6 @@ public class Simulation {
             }
         }
 
-        GenotypePopularityTracker tracker = new GenotypePopularityTracker();
-        this.averageEnergy = 0;
-        for(Animal a : this.map.getAnimals()) {
-            tracker.spotGenotype(a.getGenotype());
-            this.averageEnergy += a.getEnergy();
-        }
-        this.theMostPopularGenotype = tracker.getTheMostPopular();
-        if(this.getNumberOfAnimals() != 0)
-            this.averageEnergy /= this.getNumberOfAnimals();
-
         for(MapCell cell : cellsWithAnimals){
             if(cell.numberOfAnimals() == 1){
                 if(!cell.isPlantSet())
@@ -131,10 +121,30 @@ public class Simulation {
                     a1.addEnergy(cell.removePlant().getEnergy());
                     this.numberOfPlants--;
                 }
-                new Animal(this.map, a1.reproduceEnergy()+a2.reproduceEnergy(), this.getChildPos(a1.getPosition()));
-            }
 
+                new Animal(this.map, a1.reproduceEnergy()+a2.reproduceEnergy(), this.getChildPos(a1.getPosition()));
+                a1.spotChild();
+                a2.spotChild();
+            }
         }
+
+//        Statistics
+        GenotypePopularityTracker tracker = new GenotypePopularityTracker();
+        this.averageEnergy = 0;
+        this.numberOfChildren = 0;
+        for(Animal a : this.map.getAnimals()) {
+            tracker.spotGenotype(a.getGenotype());
+            this.averageEnergy += a.getEnergy();
+            this.numberOfChildren += a.getNumberOfChildren();
+        }
+        this.theMostPopularGenotype = tracker.getTheMostPopular();
+        if(this.getNumberOfAnimals() != 0)
+            this.averageEnergy /= this.getNumberOfAnimals();
+
+    }
+
+    public int getAverageNumberOfChildren(){
+        return this.getNumberOfAnimals() != 0 ? this.numberOfChildren / this.getNumberOfAnimals() : 0;
     }
 
     public Genotype getTheMostPopularGenotype(){

@@ -29,10 +29,7 @@ public class SimulationPane extends VBox {
     private Label theMostPopularGenotype = new Label("");
     private Label averageEnergy = new Label("0");
     private Label averageDeadAnimalEpoch = new Label("");
-    /*
-    średniej długości życia zwierząt dla martwych zwierząt,
-    średniej liczby dzieci dla żyjących ziwerząt.
-    */
+    private Label averageNumberOfChildren = new Label("0");
 
     SimulationPane(Configuration config){
         this.simulation = new Simulation(config);
@@ -91,6 +88,8 @@ public class SimulationPane extends VBox {
         statisticsPane.add(this.averageEnergy, 1,4);
         statisticsPane.add(new Label("Average dead animals epoch: "), 0, 5);
         statisticsPane.add(this.averageDeadAnimalEpoch, 1,5);
+        statisticsPane.add(new Label("Average number of children for living animals: "),0,6);
+        statisticsPane.add(this.averageNumberOfChildren,1,6);
         return statisticsPane;
     }
 
@@ -147,7 +146,7 @@ public class SimulationPane extends VBox {
         numberOfPlants.setText(Integer.toString(simulation.getNumberOfPlants()));
         this.averageEnergy.setText(Integer.toString(simulation.getAverageEnergy()));
         this.averageDeadAnimalEpoch.setText(simulation.getAverageDeadAnimalEpoch() == 0 ? "":Integer.toString(simulation.getAverageDeadAnimalEpoch()));
-
+        this.averageNumberOfChildren.setText(Integer.toString(simulation.getAverageNumberOfChildren()));
     }
 
 }
