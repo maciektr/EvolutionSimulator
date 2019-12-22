@@ -22,21 +22,20 @@ public class SimulationPane extends VBox {
 
     private Simulation simulation;
     private GridPane mapPane;
-    private GridPane leftStatisticsPane;
 
-    private Label leftEpochsCount = new Label("0");
-    private Label leftAnimalsCount= new Label("0");
-    private Label leftNumberOfPlants= new Label("0");
-    private Label leftTheMostPopularGenotype;
+    private Label epochsCount = new Label("0");
+    private Label animalsCount = new Label("0");
+    private Label numberOfPlants = new Label("0");
+    private Label theMostPopularGenotype;
 
     SimulationPane(Configuration config){
         this.simulation = new Simulation(config);
         this.mapPane = this.createMapPane();
         this.drawMap();
-        this.leftTheMostPopularGenotype = new Label(this.simulation.getTheMostPopularGenotype().toString());
-        this.leftStatisticsPane = this.createStatisticsPane(leftEpochsCount,leftTheMostPopularGenotype, leftAnimalsCount, leftNumberOfPlants);
+        this.theMostPopularGenotype = new Label(this.simulation.getTheMostPopularGenotype().toString());
+        GridPane statisticsPane = this.createStatisticsPane(epochsCount, theMostPopularGenotype, animalsCount, numberOfPlants);
 
-        this.getChildren().addAll(this.mapPane, this.leftStatisticsPane);
+        this.getChildren().addAll(this.mapPane, statisticsPane);
 
 
     }
@@ -136,10 +135,10 @@ public class SimulationPane extends VBox {
             return;
         this.simulation.nextEpoch();
         refreshMap();
-        leftEpochsCount.setText(Integer.toString(simulation.getEpoch()));
-        leftTheMostPopularGenotype.setText(simulation.getTheMostPopularGenotype().toString());
-        leftAnimalsCount.setText(Integer.toString(simulation.getNumberOfAnimals()));
-        leftNumberOfPlants.setText(Integer.toString(simulation.getNumberOfPlants()));
+        epochsCount.setText(Integer.toString(simulation.getEpoch()));
+        theMostPopularGenotype.setText(simulation.getTheMostPopularGenotype().toString());
+        animalsCount.setText(Integer.toString(simulation.getNumberOfAnimals()));
+        numberOfPlants.setText(Integer.toString(simulation.getNumberOfPlants()));
 
     }
 

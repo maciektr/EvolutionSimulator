@@ -1,7 +1,6 @@
 package agh.cs.oop1.userInterface;
 
 import agh.cs.oop1.simulation.*;
-import com.sun.org.apache.bcel.internal.generic.LADD;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -9,24 +8,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import sun.awt.im.InputMethodAdapter;
-import sun.security.krb5.Config;
-
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -73,6 +62,7 @@ public class SimulationStage extends Stage {
                 }
             }
         });
+        Timer timer = new Timer();
 
         button1.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -80,7 +70,6 @@ public class SimulationStage extends Stage {
                     return;
 
                 int epochs = Integer.parseInt(numberOfEpochsField.getText());
-                Timer timer = new Timer();
                 TimerTask task = new TimerTask(){
                     int counter = 0;
                     @Override
@@ -89,6 +78,7 @@ public class SimulationStage extends Stage {
                             timer.cancel();
                             timer.purge();
                         }
+                        System.out.println("ADD");
                         Platform.runLater(()-> {
                             try {
                                 left.nextEpoch();
@@ -108,6 +98,7 @@ public class SimulationStage extends Stage {
         maps.getChildren().add(left);
         if(config.dualMode)
             maps.getChildren().add(right);
+
         VBox rootPane = new VBox();
         rootPane.getChildren().addAll(buttonsPane, maps);
 
