@@ -24,7 +24,7 @@ import java.io.*;
 
 public class SimulationStage extends Stage {
 
-    SimulationStage(Configuration config){
+    SimulationStage(Configuration config) throws IllegalAccessException {
         SimulationPane left = new SimulationPane(config);
         SimulationPane right = config.dualMode ? new SimulationPane(config) : null;
 

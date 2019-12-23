@@ -13,6 +13,9 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
+import static java.lang.Double.max;
+import static java.lang.Double.min;
+
 public class SimulationPane extends VBox {
     private int windowWidth = 851;
     private int windowHeight = 555;
@@ -22,6 +25,7 @@ public class SimulationPane extends VBox {
 
     private Simulation simulation;
     private GridPane mapPane;
+    private Configuration config;
 
     private Label epochsCount = new Label("0");
     private Label animalsCount = new Label("0");
@@ -31,7 +35,8 @@ public class SimulationPane extends VBox {
     private Label averageDeadAnimalEpoch = new Label("");
     private Label averageNumberOfChildren = new Label("0");
 
-    SimulationPane(Configuration config){
+    SimulationPane(Configuration config) throws IllegalAccessException {
+        this.config = config;
         this.simulation = new Simulation(config);
         this.mapPane = this.createMapPane();
         this.drawMap();
@@ -56,7 +61,12 @@ public class SimulationPane extends VBox {
         return mapPane;
     }
 
-    private void drawMap(){
+    private Color getCircleColor(MapEnumerator enumerator, int c, int r) throws IllegalAccessException {
+        int animalEnergy = enumerator.getMapCellByIndex(c,r).getMostEnergeticAnimal().getEnergy();
+        return Color.hsb(24,(min(1.0,((double)animalEnergy / (double)this.config.startEnergy))*0.8)+0.2,1.0);
+    }
+
+    private void drawMap() throws IllegalAccessException {
         MapEnumerator enumerator = new MapEnumerator(simulation.getMap());
         for(int c = 0; c<enumerator.numberOfColumns(); c++)
             for(int r = 0; r<enumerator.numberOfRows(); r++){
@@ -68,7 +78,7 @@ public class SimulationPane extends VBox {
                 rectangle.setFill(SimulationPane.setRectangleColor(enumerator,c,r));
                 this.mapPane.add(rectangle, c, r);
                 if (cell != null && cell.anyAnimals())
-                    this.mapPane.add(new Circle(this.circleRadius, Color.ORANGE),c,r);
+                    this.mapPane.add(new Circle(this.circleRadius, this.getCircleColor(enumerator,c,r)),c,r);
             }
     }
 
@@ -105,7 +115,7 @@ public class SimulationPane extends VBox {
         return res;
     }
 
-    private void refreshMap(){
+    private void refreshMap() throws IllegalAccessException {
         MapEnumerator enumerator = new MapEnumerator(simulation.getMap());
         ArrayList<Node> removalCandidates = new ArrayList<>();
         ArrayList<Node> addCandidate = new ArrayList<>();
@@ -129,12 +139,10 @@ public class SimulationPane extends VBox {
         this.mapPane.getChildren().removeAll(removalCandidates);
         this.mapPane.getChildren().addAll(addCandidate);
         for(Animal animal : simulation.getMap().getAnimalsList()){
-            this.mapPane.add(this.makeCircle(), enumerator.getColumn(animal.getPosition()),enumerator.getRow(animal.getPosition()));
+            int c = enumerator.getColumn(animal.getPosition());
+            int r = enumerator.getRow(animal.getPosition());
+            this.mapPane.add(new Circle(this.circleRadius, this.getCircleColor(enumerator,c,r)), c,r);
         }
-    }
-
-    private Circle makeCircle(){
-        return new Circle(this.circleRadius, Color.ORANGE);
     }
 
     public void nextEpoch() throws IllegalAccessException {
