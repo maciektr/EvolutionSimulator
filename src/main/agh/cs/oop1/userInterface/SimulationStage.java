@@ -47,6 +47,7 @@ public class SimulationStage extends Stage {
         Button buttonNextEpoch = new Button("Next epoch");
         Button buttonStop = new Button("Stop");
         Button buttonSaveToFile = new Button("Save to file");
+        Button buttonReset = new Button("Reset");
 
         buttonsPane.add(text1, 0, 0);
         buttonsPane.add(numberOfEpochsField, 1, 0);
@@ -54,6 +55,7 @@ public class SimulationStage extends Stage {
         buttonsPane.add(buttonNextEpoch, 3, 0);
         buttonsPane.add(buttonStop, 4,0);
         buttonsPane.add(buttonSaveToFile,5,0);
+        buttonsPane.add(buttonReset, 6,0);
 
         buttonsPane.setAlignment(Pos.TOP_CENTER);
         buttonsPane.setPadding(new Insets(10, 10, 0, 10));
@@ -71,6 +73,15 @@ public class SimulationStage extends Stage {
                     ex.printStackTrace();
                 }
 
+            }
+        });
+
+        buttonReset.setOnAction((e) -> {
+            try {
+                new SimulationStage(config);
+                this.close();
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
             }
         });
 

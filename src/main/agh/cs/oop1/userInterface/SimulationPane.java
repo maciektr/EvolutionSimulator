@@ -1,14 +1,11 @@
 package agh.cs.oop1.userInterface;
 
 import agh.cs.oop1.simulation.*;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -42,9 +39,9 @@ public class SimulationPane extends VBox {
         this.drawMap();
 
         this.epochsCount.setText(Integer.toString(simulation.getEpoch()));
-        this.theMostPopularGenotype.setText(simulation.getStatistics().getTheMostPopularGenotype() != null ? simulation.getStatistics().getTheMostPopularGenotype().toString():"");
+        this.theMostPopularGenotype.setText(simulation.getStatistics().getDominantGenotype() != null ? simulation.getStatistics().getDominantGenotype().toString():"");
         this.animalsCount.setText(Integer.toString(simulation.getNumberOfAnimals()));
-        this.numberOfPlants.setText(Integer.toString(simulation.getStatistics().getNumberOfPlants()));
+        this.numberOfPlants.setText(Integer.toString(simulation.getStatistics().getCurrentNumberOfPlants()));
         this.averageEnergy.setText(Integer.toString(config.startEnergy));
 
         GridPane statisticsPane = this.createStatisticsPane();
@@ -64,7 +61,7 @@ public class SimulationPane extends VBox {
 
     private Color getCircleColor(MapEnumerator enumerator, int c, int r) throws IllegalAccessException {
         for(Animal a : enumerator.getMapCellByIndex(c,r).getAnimals()){
-            if(a.getGenotype().equals(this.simulation.getStatistics().getTheMostPopularGenotype()))
+            if(a.getGenotype().equals(this.simulation.getStatistics().getDominantGenotype()))
                 return Color.RED;
         }
         int animalEnergy = enumerator.getMapCellByIndex(c,r).getMostEnergeticAnimal().getEnergy();
@@ -166,10 +163,10 @@ public class SimulationPane extends VBox {
         this.simulation.nextEpoch();
         refreshMap();
         epochsCount.setText(Integer.toString(simulation.getEpoch()));
-        theMostPopularGenotype.setText(simulation.getStatistics().getTheMostPopularGenotype() != null ? simulation.getStatistics().getTheMostPopularGenotype().toString():"");
+        theMostPopularGenotype.setText(simulation.getStatistics().getDominantGenotype() != null ? simulation.getStatistics().getDominantGenotype().toString():"");
         animalsCount.setText(Integer.toString(simulation.getNumberOfAnimals()));
-        numberOfPlants.setText(Integer.toString(simulation.getStatistics().getNumberOfPlants()));
-        this.averageEnergy.setText(Integer.toString(simulation.getStatistics().getAverageEnergy()));
+        numberOfPlants.setText(Integer.toString(simulation.getStatistics().getCurrentNumberOfPlants()));
+        this.averageEnergy.setText(Integer.toString(simulation.getStatistics().getCurrentAverageEnergy()));
         this.averageDeadAnimalEpoch.setText(simulation.getStatistics().getAverageDeadAnimalEpoch() == 0 ? "":Integer.toString(simulation.getStatistics().getAverageDeadAnimalEpoch()));
         this.averageNumberOfChildren.setText(Integer.toString(simulation.getStatistics().getAverageNumberOfChildren()));
     }

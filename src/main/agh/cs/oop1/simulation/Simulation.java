@@ -26,7 +26,7 @@ public class Simulation {
             numberOfAnimals--;
         }
         for(Animal a : this.map.getAnimals()){
-            if(a.getGenotype().equals(this.statistics.getTheMostPopularGenotype()))
+            if(a.getGenotype().equals(this.statistics.getDominantGenotype()))
                 this.statistics.getTracker().storeAnimal(a);
         }
 
