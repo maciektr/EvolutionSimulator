@@ -1,6 +1,5 @@
 package agh.cs.oop1.simulation;
 
-import agh.cs.oop1.simulation.Genotype;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,9 +10,6 @@ public class GenotypePopularityTracker{
     private Genotype theMostPopular = null;
     private int theMostPopularCount = 0;
 
-    public int trackerSize(){
-        return this.tracker.size();
-    }
 
     public void spotGenotype(Genotype genotype){
         this.tracker.putIfAbsent(genotype, 0);
@@ -33,8 +29,5 @@ public class GenotypePopularityTracker{
     public void storeAnimal(Animal animal){
         if(animal.getGenotype().equals(this.getTheMostPopular()))
             this.animals.add(animal);
-    }
-    public ArrayList<Animal> getAnimals(){
-        return this.animals;
     }
 }

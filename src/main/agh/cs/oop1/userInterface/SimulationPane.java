@@ -1,11 +1,14 @@
 package agh.cs.oop1.userInterface;
 
 import agh.cs.oop1.simulation.*;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -47,6 +50,7 @@ public class SimulationPane extends VBox {
         GridPane statisticsPane = this.createStatisticsPane();
         this.getChildren().addAll(this.mapPane, statisticsPane);
     }
+
     private GridPane createMapPane(){
         GridPane mapPane = new GridPane();
         mapPane.setPadding(new Insets(5, 5, 5, 5));
@@ -67,6 +71,18 @@ public class SimulationPane extends VBox {
         return Color.hsb(27,(min(1.0,((double)animalEnergy / (double)this.config.startEnergy))*0.8)+0.2,1.0);
     }
 
+    private Circle createCircle(MapEnumerator enumerator, int c, int r) throws IllegalAccessException {
+        Circle pane = new Circle(this.circleRadius, this.getCircleColor(enumerator, c, r));
+        pane.setOnMouseClicked(e -> {
+            try {
+                new AnimalDetailsStage(enumerator.getMapCellByIndex(c,r).getMostEnergeticAnimal());
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            }
+        });
+        return pane;
+    }
+
     private void drawMap() throws IllegalAccessException {
         MapEnumerator enumerator = new MapEnumerator(simulation.getMap());
         for(int c = 0; c<enumerator.numberOfColumns(); c++)
@@ -79,7 +95,7 @@ public class SimulationPane extends VBox {
                 rectangle.setFill(SimulationPane.setRectangleColor(enumerator,c,r));
                 this.mapPane.add(rectangle, c, r);
                 if (cell != null && cell.anyAnimals())
-                    this.mapPane.add(new Circle(this.circleRadius, this.getCircleColor(enumerator,c,r)),c,r);
+                    this.mapPane.add(this.createCircle(enumerator,c,r), c, r);
             }
     }
 
@@ -142,7 +158,7 @@ public class SimulationPane extends VBox {
         for(Animal animal : simulation.getMap().getAnimalsList()){
             int c = enumerator.getColumn(animal.getPosition());
             int r = enumerator.getRow(animal.getPosition());
-            this.mapPane.add(new Circle(this.circleRadius, this.getCircleColor(enumerator,c,r)), c,r);
+            this.mapPane.add(this.createCircle(enumerator,c,r),c,r);
         }
     }
 

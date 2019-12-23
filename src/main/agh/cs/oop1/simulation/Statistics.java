@@ -95,12 +95,6 @@ public class Statistics {
             numberOfChildren += a.getNumberOfChildren();
         }
         this.theMostPopularGenotype = tracker.getTheMostPopular();
-/*
-        for(Animal a : animals){
-            this.tracker.storeAnimal(a);
-        }
-*/
-
         this.setAverageEnergy(animals.size(), energySum);
         this.setNumberOfChildren(numberOfChildren);
     }
