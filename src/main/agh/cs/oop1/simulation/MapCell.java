@@ -3,6 +3,7 @@ package agh.cs.oop1.simulation;
 
 import org.javatuples.Pair;
 
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class MapCell {
@@ -59,5 +60,9 @@ public class MapCell {
 
     public boolean isPlantSet(){
         return this.plant != null;
+    }
+
+    public ArrayList<Animal> getAnimals(){
+        return new ArrayList<>(this.animals);
     }
 }

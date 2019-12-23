@@ -1,20 +1,15 @@
 package agh.cs.oop1.simulation;
 
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 import org.javatuples.Pair;
-
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Random;
 
 public class Simulation {
     private LoopedMap map;
     private Configuration config;
-    private int epoch = 0;
     private static Random rand = new Random();
-    private Genotype theMostPopularGenotype;
-    private  int numberOfPlants = 0;
+    private Statistics statistics;
 
     public Simulation(Configuration config){
         this.config = config;
@@ -23,14 +18,18 @@ public class Simulation {
         Plant.setEnergy(config.plantEnergy);
         Animal.setEnergyPerMove(config.moveEnergy);
         int numberOfAnimals = config.startAnimals;
+        this.statistics = new Statistics();
 
-        GenotypePopularityTracker tracker = new GenotypePopularityTracker();
         while(numberOfAnimals > 0){
             Animal a = new Animal(map, config.startEnergy, map.getRandomPosition());
-            tracker.spotGenotype(a.getGenotype());
+            this.statistics.getTracker().spotGenotype(a.getGenotype());
             numberOfAnimals--;
         }
-        this.theMostPopularGenotype = tracker.getTheMostPopular();
+        for(Animal a : this.map.getAnimals()){
+            if(a.getGenotype().equals(this.statistics.getDominantGenotype()))
+                this.statistics.getTracker().storeAnimal(a);
+        }
+
         this.setPlants();
         this.setOnlyJunglePlants();
     }
@@ -41,7 +40,7 @@ public class Simulation {
         while(plants > 0){
             Vector2d pos = this.map.getRandomFreeOfGrassPosition();
             if(this.map.getMapCell(pos)==null ||(this.map.getMapCell(pos)!=null && !this.map.getMapCell(pos).isPlantSet()))
-                this.numberOfPlants++;
+                this.statistics.spotNewPlant();
 
             this.map.setPlantToCell(new Plant(pos));
             plants--;
@@ -56,8 +55,7 @@ public class Simulation {
         for(int i = 0; i<(plants/2); i++){
             Vector2d pos = this.map.getRandomJunglePosition();
             if(this.map.getMapCell(pos)==null ||(this.map.getMapCell(pos)!=null && !this.map.getMapCell(pos).isPlantSet()))
-                this.numberOfPlants++;
-
+                this.statistics.spotNewPlant();
             this.map.setPlantToCell(new Plant(pos));
         }
     }
@@ -83,28 +81,26 @@ public class Simulation {
     }
 
     public void nextEpoch() throws IllegalAccessException {
-        this.epoch++;
+//        this.epoch++;
+        this.statistics.spotEpoch();
         this.setPlants();
 
         HashSet<MapCell> cellsWithAnimals = new HashSet<MapCell>();
-
         ArrayList<Animal> animals = new ArrayList<Animal>(this.map.getAnimals());
         for(Animal a : animals){
             a.move(MapDirection.getRandomDirection());
             cellsWithAnimals.add(this.map.getMapCell(a.getPosition()));
+            if(a.getEnergy() <= 0){
+                this.statistics.spotDeadAnimal(this.statistics.getEpoch());
+            }
         }
-
-        GenotypePopularityTracker tracker = new GenotypePopularityTracker();
-        for(Animal a : this.map.getAnimals())
-            tracker.spotGenotype(a.getGenotype());
-        this.theMostPopularGenotype = tracker.getTheMostPopular();
 
         for(MapCell cell : cellsWithAnimals){
             if(cell.numberOfAnimals() == 1){
                 if(!cell.isPlantSet())
                     continue;
                 int gainedEnergy = cell.removePlant().getEnergy();
-                this.numberOfPlants--;
+                this.statistics.spotEatenPlant();
                 cell.getMostEnergeticAnimal().addEnergy(gainedEnergy);
             }else if(cell.numberOfAnimals() >= 2){
                 Pair<Animal, Animal> pair= cell.getTwoMostEnergeticAnimals();
@@ -112,28 +108,28 @@ public class Simulation {
                 Animal a2 = pair.getValue1();
                 if(cell.isPlantSet()) {
                     a1.addEnergy(cell.removePlant().getEnergy());
-                    this.numberOfPlants--;
+                    this.statistics.spotEatenPlant();
                 }
+
                 new Animal(this.map, a1.reproduceEnergy()+a2.reproduceEnergy(), this.getChildPos(a1.getPosition()));
+                a1.spotChild();
+                a2.spotChild();
             }
-
         }
-    }
-
-    public Genotype getTheMostPopularGenotype(){
-        return this.theMostPopularGenotype;
+        this.statistics.update(this.map.getAnimals());
     }
 
     public LoopedMap getMap(){
         return this.map;
     }
 
-    public int getEpoch(){return epoch;}
+    public int getEpoch(){return this.statistics.getEpoch();}
 
     public int getNumberOfAnimals(){
         return this.map.getAnimals().size();
     }
-    public int getNumberOfPlants(){
-        return this.numberOfPlants;
+
+    public Statistics getStatistics() {
+        return statistics;
     }
 }

@@ -116,6 +116,7 @@ public class LoopedMapTest {
         Assert.assertTrue(rndFree.follows(jungleLowerLeft));
     }
 
+/*
     @Test
     public void testDied(){
         LoopedMap map = new LoopedMap(10,10, 2, 2);
@@ -125,6 +126,7 @@ public class LoopedMapTest {
         map.died(animal);
         Assert.assertFalse(map.anyAnimals(position));
     }
+*/
 
     @Test
     public void testEnergyChanged() throws IllegalAccessException {

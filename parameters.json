@@ -2,11 +2,11 @@
   "width": 50,
   "height": 50,
   "jungleRatio": 0.5,
-  "startAnimals":50,
+  "startAnimals":500,
   "startEnergy":300,
   "moveEnergy": 5,
   "plantEnergy":170,
   "plantsPerEpoch": 1,
-  "dualMode" :true
+  "dualMode" : true
 }
 

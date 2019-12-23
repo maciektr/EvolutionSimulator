@@ -167,6 +167,7 @@ public class LoopedMap implements IWorldMap, IStateChangeObserver {
         }
     }
 
+/*
     public void died(IMapElement element){
         if(element instanceof Animal){
             Animal animal = (Animal)element;
@@ -174,6 +175,8 @@ public class LoopedMap implements IWorldMap, IStateChangeObserver {
             this.removeAnimalFromCell(animal);
         }
     }
+*/
+
     public void energyChanged(Animal animal){
         this.removeAnimalFromCell(animal);
         if(animal.getEnergy() <= 0)
