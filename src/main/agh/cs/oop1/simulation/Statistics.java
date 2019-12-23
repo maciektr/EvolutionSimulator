@@ -1,5 +1,6 @@
 package agh.cs.oop1.simulation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Statistics {
@@ -11,10 +12,20 @@ public class Statistics {
     private int numberOfAnimals = 0;
     private Genotype theMostPopularGenotype;
     private int epoch =0;
+    private transient GenotypePopularityTracker tracker = new GenotypePopularityTracker();
 
-    public Statistics(Genotype theMostPopularGenotype){
-        this.theMostPopularGenotype = theMostPopularGenotype;
+    public Statistics(){
     }
+
+    public GenotypePopularityTracker getTracker() {
+        return this.tracker;
+    }
+
+/*
+    public ArrayList<Animal> getAnimalsWithDominantGenotype(){
+        return this.tracker.getAnimals();
+    }
+*/
 
     public int getEpoch(){
         return this.epoch;
@@ -35,9 +46,9 @@ public class Statistics {
         return this.numberOfAnimals;
     }
 
-    public void setTheMostPopularGenotype(GenotypePopularityTracker tracker){
+/*    public void setTheMostPopularGenotype(GenotypePopularityTracker tracker){
         this.theMostPopularGenotype = tracker.getTheMostPopular();
-    }
+    }*/
 
     public void setAverageEnergy(int numberOfAnimals, int energySum){
         this.numberOfAnimals = numberOfAnimals;
@@ -75,14 +86,21 @@ public class Statistics {
 
     public void update(List<Animal> animals){
         int energySum = 0;
-        GenotypePopularityTracker tracker = new GenotypePopularityTracker();
+        this.tracker = new GenotypePopularityTracker();
+
         int numberOfChildren = 0;
         for(Animal a : animals) {
             tracker.spotGenotype(a.getGenotype());
             energySum += a.getEnergy();
             numberOfChildren += a.getNumberOfChildren();
         }
-        this.setTheMostPopularGenotype(tracker);
+        this.theMostPopularGenotype = tracker.getTheMostPopular();
+/*
+        for(Animal a : animals){
+            this.tracker.storeAnimal(a);
+        }
+*/
+
         this.setAverageEnergy(animals.size(), energySum);
         this.setNumberOfChildren(numberOfChildren);
     }

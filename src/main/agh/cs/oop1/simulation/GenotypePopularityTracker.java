@@ -2,6 +2,7 @@ package agh.cs.oop1.simulation;
 
 import agh.cs.oop1.simulation.Genotype;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,5 +27,14 @@ public class GenotypePopularityTracker{
 
     public Genotype getTheMostPopular(){
         return theMostPopular;
+    }
+
+    private ArrayList<Animal> animals = new ArrayList<>();
+    public void storeAnimal(Animal animal){
+        if(animal.getGenotype().equals(this.getTheMostPopular()))
+            this.animals.add(animal);
+    }
+    public ArrayList<Animal> getAnimals(){
+        return this.animals;
     }
 }

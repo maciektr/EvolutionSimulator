@@ -8,7 +8,6 @@ import java.util.Random;
 public class Simulation {
     private LoopedMap map;
     private Configuration config;
-//    private int epoch = 0;
     private static Random rand = new Random();
     private Statistics statistics;
 
@@ -19,14 +18,18 @@ public class Simulation {
         Plant.setEnergy(config.plantEnergy);
         Animal.setEnergyPerMove(config.moveEnergy);
         int numberOfAnimals = config.startAnimals;
+        this.statistics = new Statistics();
 
-        GenotypePopularityTracker tracker = new GenotypePopularityTracker();
         while(numberOfAnimals > 0){
             Animal a = new Animal(map, config.startEnergy, map.getRandomPosition());
-            tracker.spotGenotype(a.getGenotype());
+            this.statistics.getTracker().spotGenotype(a.getGenotype());
             numberOfAnimals--;
         }
-        this.statistics = new Statistics(tracker.getTheMostPopular());
+        for(Animal a : this.map.getAnimals()){
+            if(a.getGenotype().equals(this.statistics.getTheMostPopularGenotype()))
+                this.statistics.getTracker().storeAnimal(a);
+        }
+
         this.setPlants();
         this.setOnlyJunglePlants();
     }

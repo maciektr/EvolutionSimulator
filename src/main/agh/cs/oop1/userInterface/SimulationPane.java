@@ -10,10 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-
 import java.util.ArrayList;
-
-import static java.lang.Double.max;
 import static java.lang.Double.min;
 
 public class SimulationPane extends VBox {
@@ -62,8 +59,12 @@ public class SimulationPane extends VBox {
     }
 
     private Color getCircleColor(MapEnumerator enumerator, int c, int r) throws IllegalAccessException {
+        for(Animal a : enumerator.getMapCellByIndex(c,r).getAnimals()){
+            if(a.getGenotype().equals(this.simulation.getStatistics().getTheMostPopularGenotype()))
+                return Color.RED;
+        }
         int animalEnergy = enumerator.getMapCellByIndex(c,r).getMostEnergeticAnimal().getEnergy();
-        return Color.hsb(24,(min(1.0,((double)animalEnergy / (double)this.config.startEnergy))*0.8)+0.2,1.0);
+        return Color.hsb(27,(min(1.0,((double)animalEnergy / (double)this.config.startEnergy))*0.8)+0.2,1.0);
     }
 
     private void drawMap() throws IllegalAccessException {
@@ -92,7 +93,7 @@ public class SimulationPane extends VBox {
         statisticsPane.add(animalsCount,1,1);
         statisticsPane.add(new Label("Number of plants: "),0,2);
         statisticsPane.add(numberOfPlants, 1,2);
-        statisticsPane.add(new Label("The most popular genotype: "),0,3);
+        statisticsPane.add(new Label("The most popular genotype (red): "),0,3);
         statisticsPane.add(theMostPopularGenotype,1,3);
         statisticsPane.add(new Label("Average animal energy: "),0,4);
         statisticsPane.add(this.averageEnergy, 1,4);
