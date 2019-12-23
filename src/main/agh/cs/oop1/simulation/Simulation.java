@@ -81,7 +81,6 @@ public class Simulation {
     }
 
     public void nextEpoch() throws IllegalAccessException {
-//        this.epoch++;
         this.statistics.spotEpoch();
         this.setPlants();
 

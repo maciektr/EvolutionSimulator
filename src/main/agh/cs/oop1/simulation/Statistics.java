@@ -37,7 +37,6 @@ public class Statistics {
 
     public void spotEpoch() {
         this.epoch++;
-        System.out.println(this.historicalSumOfChildren);
         this.historicalAverageNumberOfChildren = this.historicalSumOfChildren / this.epoch;
         this.historicalAverageSumOfPlants = this.historicalSumOfPlants / this.epoch;
         this.historicalAverageEnergy = this.historicalEnergySum / this.epoch;

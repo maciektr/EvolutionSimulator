@@ -140,7 +140,7 @@ public class SimulationStage extends Stage {
         Scene scene = new Scene(rootPane);
         this.setTitle("Evolution Simulator");
         this.setScene(scene);
-//        this.setResizable(false);
+        this.setResizable(false);
         this.sizeToScene();
 
         this.show();

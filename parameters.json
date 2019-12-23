@@ -5,7 +5,7 @@
   "startAnimals":500,
   "startEnergy":300,
   "moveEnergy": 5,
-  "plantEnergy":170,
+  "plantEnergy":300,
   "plantsPerEpoch": 1,
   "dualMode" : true
 }
