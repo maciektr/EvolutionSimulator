@@ -6,7 +6,7 @@ The environment is represented as an euclidean plain. Leaving the map thru any o
 
 There is a jungle located in the center of simulation. Every epoch (day) two plants grow on the map, one exclusively inside the jungle. This means that there is generally more plants in the jungle (since it is smaller than the whole map).   
 
-Some animals are placed on the map in the initial state. Every animal has its own simple dna representing the probability with which it choose direction of the next move. If two animals get on the same spot on the map, they can reproduce.  
+Some animals are placed on the map in the initial state. Every animal has its own simple dna representing the probability of the animals next move. If two animals step on the same spot on the map, they can reproduce.  
 
 The simulation  keeps track of some general statistics. 
  
